@@ -1,308 +1,204 @@
 import { useNavigation } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import {
-  Badge,
-  Body,
+  HStack,
+  TitleThree,
+  VStack,
+  useColorModeValue,
+  FlatList,
+  Image,
+  VerticalCard,
   Box,
   Button,
-  Footnote,
-  HStack,
-  Image,
   SearchBox,
-  TitleThree,
-  TitleTwo,
-  useColorModeValue,
-  useTheme,
-  VStack,
+  Badge,
+  Body,
+  useColorMode,
+  Center,
 } from "@spirokit/core";
-import React, { memo } from "react";
-import { ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Dimensions, View } from "react-native";
 import {
-  CakeIcon,
-  KeyIcon,
-  LocationMarkerIcon,
-  OfficeBuildingIcon,
-  TicketIcon,
+  FilterIcon,
+  ShoppingBagIcon,
+  TrashIcon,
 } from "react-native-heroicons/outline";
-import { SvgProps } from "react-native-svg";
-import Carousel, { CarouselItem } from "../components/Carousel";
-import Score from "../components/Score";
-import { ScreenNavigationProp } from "../navigation/GlobalParamList";
+import BackButton from "../components/BackButton";
+import {
+  GlobalParamList,
+  ScreenNavigationProp,
+} from "../navigation/GlobalParamList";
+import { Filter } from "./SearchFiltersScreen";
+import NoResultsLightIcon from "../assets/no-results-light.png";
+import NoResultsDarkIcon from "../assets/no-results-dark.png";
 
-const firstCarouselItems: CarouselItem[] = [
+const screenWidth = Dimensions.get("window").width;
+const imageWidth = (screenWidth - 32) / 2; // 32 for the left and right margin (16 each)
+
+type ItemProps = { id: number; assetUrl: string; title: string };
+const items: ItemProps[] = [
   {
     id: 1,
-    title: "Private City Tour of the City of Buenos Aires with a local guide",
-    description:
-      "Our VIP Private City Tour will allow you to discover a large number of attractions and curiosities of the city of Buenos Aires in a relaxed and exclusive atmosphere with a bilingual guide.",
-    assetUrl: "https://i.imgur.com/oyZxmXH.jpg",
+    assetUrl: "https://i.imgur.com/CpKlRgU.png",
+    title: "Play Hard t-shirt",
   },
   {
     id: 2,
-    title: "Small-Group Food Tour in Palermo with Dinner",
-    description:
-      "Explore the Palermo neighborhood of Buenos Aires through your taste buds with this small-group tour.",
-    assetUrl: "https://i.imgur.com/LWy1U7s.jpg",
+    assetUrl: "https://i.imgur.com/qsW2nsI.png",
+    title: "Rainbox t-shirt",
   },
   {
     id: 3,
-    title: "Private City Tour of the City of Buenos Aires with a local guide",
-    description:
-      "Our VIP Private City Tour will allow you to discover a large number of attractions and curiosities of the city of Buenos Aires in a relaxed and exclusive atmosphere with a bilingual guide.",
-    assetUrl: "https://i.imgur.com/oyZxmXH.jpg",
+    assetUrl: "https://i.imgur.com/rSvwWy3.png",
+    title: "PAC-MAN t-shirt",
   },
   {
     id: 4,
-    title: "Small-Group Food Tour in Palermo with Dinner",
-    description:
-      "Explore the Palermo neighborhood of Buenos Aires through your taste buds with this small-group tour.",
-    assetUrl: "https://i.imgur.com/LWy1U7s.jpg",
+    assetUrl: "https://i.imgur.com/mM9tFLP.png",
+    title: "Solar t-shirt",
   },
-];
-
-const secondCarouselItems: CarouselItem[] = [
   {
     id: 5,
-    title: "Half-Day Recoleta and Palermo Bike Tour in Buenos Aires",
-    description:
-      "The Buenos Aires neighborhoods of Recoleta and Palermo are known for their green parks, striking monuments, and lively plazas.",
-    assetUrl: "https://i.imgur.com/swz7iCi.jpg",
+    assetUrl: "https://i.imgur.com/K2D1aIE.png",
+    title: "Derby t-shirt",
   },
   {
     id: 6,
-    title:
-      "Delta del Tigre Premium with Navigation from Buenos Aires in Private",
-    description:
-      "We start the tour with pick up at your hotel, then the guide will leave you in Puerto Madero where you will have a 2-hour navigation in comfortable boats through the Rio de La Plata with the best panoramic views of the city",
-    assetUrl: "https://i.imgur.com/RpRdY0v.jpg",
-  },
-  {
-    id: 7,
-    title: "Half-Day Recoleta and Palermo Bike Tour in Buenos Aires",
-    description:
-      "The Buenos Aires neighborhoods of Recoleta and Palermo are known for their green parks, striking monuments, and lively plazas.",
-    assetUrl: "https://i.imgur.com/swz7iCi.jpg",
-  },
-  {
-    id: 8,
-    title:
-      "Delta del Tigre Premium with Navigation from Buenos Aires in Private",
-    description:
-      "We start the tour with pick up at your hotel, then the guide will leave you in Puerto Madero where you will have a 2-hour navigation in comfortable boats through the Rio de La Plata with the best panoramic views of the city",
-    assetUrl: "https://i.imgur.com/RpRdY0v.jpg",
+    assetUrl: "https://i.imgur.com/odSZ3Gv.png",
+    title: "Regrets t-shirt",
   },
 ];
 
-const SearchScreen = () => {
-  const { colors } = useTheme();
-  return (
-    <ScrollView
-      style={{
-        backgroundColor: useColorModeValue(
-          colors.primaryGray["100"],
-          colors.primaryDark["0"]
-        ),
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}
-    >
-      <VStack
-        safeArea
-        padding={4}
-        width="full"
-        space={4}
-        backgroundColor={useColorModeValue("white", "primaryDark.0")}
-      >
-        <Box>
-          <TitleTwo marginBottom={1} fontWeight={"bold"}>
-            Search
-          </TitleTwo>
-          <SearchBox placeholder="Where to?"></SearchBox>
-        </Box>
-        <RecentSearches></RecentSearches>
-        <Categories></Categories>
-      </VStack>
-      <VStack
-        borderTopRadius={16}
-        padding={4}
-        flex={1}
-        space={4}
-        width="full"
-        backgroundColor={useColorModeValue("white", "primaryDark.1")}
-      >
-        <Carousel
-          variant="horizontal"
-          title="Nearby experiences"
-          items={firstCarouselItems}
-        ></Carousel>
-        <Carousel
-          variant="horizontal"
-          title="Attractions nearby"
-          items={secondCarouselItems}
-        ></Carousel>
-        <NearbyDinner></NearbyDinner>
-      </VStack>
-    </ScrollView>
-  );
-};
+type SearchProps = StackScreenProps<GlobalParamList, "Search">;
 
-const RecentSearchBadge = ({
-  children,
-  icon,
-}: {
-  children: string;
-  icon?: (props: SvgProps) => JSX.Element;
-}) => {
-  return (
-    <Badge IconLeftComponent={icon} marginRight={2}>
-      {children}
-    </Badge>
+const SearchScreen = (props: SearchProps) => {
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const NoResultsIcon = useColorModeValue(
+    NoResultsLightIcon,
+    NoResultsDarkIcon
   );
-};
-
-const RecentSearches = () => {
-  return (
-    <VStack space={2} marginRight={-4}>
-      <Body fontWeight={"medium"}>Your recent searches</Body>
-      <ScrollView horizontal={true}>
-        <RecentSearchBadge icon={CakeIcon}>
-          Restaurants in Miami
-        </RecentSearchBadge>
-        <RecentSearchBadge icon={TicketIcon}>
-          Attractions in Paris
-        </RecentSearchBadge>
-        <RecentSearchBadge icon={CakeIcon}>
-          Restaurants in Buenos Aires
-        </RecentSearchBadge>
-      </ScrollView>
-    </VStack>
+  const noResultsTextColor = useColorModeValue(
+    "primaryGray.100",
+    "primary.300"
   );
-};
 
-const Categories = () => {
+  const [results, setResults] = useState<ItemProps[]>(items);
+  const [activeFilters, setActiveFilters] = useState<Filter[]>(
+    props.route.params?.activeFilters ?? []
+  );
+
   const navigation = useNavigation<ScreenNavigationProp>();
+
+  const onClearActiveFilters = () => {
+    setActiveFilters([]);
+  };
+
+  useEffect(() => {
+    if (props.route.params?.activeFilters) {
+      setActiveFilters(props.route.params.activeFilters);
+    }
+  }, [props.route.params?.activeFilters]);
+
+  const onSearchByTerm = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+    setResults(items.filter((item) => item.title.includes(searchTerm)));
+  };
+
   return (
-    <VStack space={2}>
-      <Body fontWeight={"medium"}>Categories</Body>
-      <VStack space={4}>
-        <HStack space={2}>
+    <VStack
+      space={4}
+      padding={4}
+      safeAreaBottom
+      flex={1}
+      backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
+    >
+      <HStack space={4} alignItems="center">
+        <BackButton></BackButton>
+        <SearchBox
+          onChangeText={(searchTerm) => onSearchByTerm(searchTerm)}
+          flex={1}
+        ></SearchBox>
+        <Button
+          width="auto"
+          variant="secondary"
+          size="sm"
+          IconLeftComponent={FilterIcon}
+          onPress={() =>
+            navigation.navigate("SearchFilters", { activeFilters })
+          }
+        ></Button>
+      </HStack>
+
+      {activeFilters ? (
+        <HStack
+          width="full"
+          space={4}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <HStack space={2} flex={1} flexWrap="wrap">
+            {activeFilters.map((af, index) => (
+              <Badge marginY={1} key={`${af.type}-${af.value}-${index}`}>
+                {af.value}
+              </Badge>
+            ))}
+          </HStack>
           <Button
             size="sm"
-            IconLeftComponent={CakeIcon}
-            onPress={() => navigation.navigate("FoodSearch", {})}
-          >
-            Food
-          </Button>
-          <Button size="sm" IconLeftComponent={OfficeBuildingIcon}>
-            Hotels
-          </Button>
+            variant="secondary"
+            width="auto"
+            IconLeftComponent={TrashIcon}
+            onPress={() => onClearActiveFilters()}
+          ></Button>
         </HStack>
-        <HStack space={2}>
-          <Button size="sm" IconLeftComponent={TicketIcon}>
-            Attractions
-          </Button>
-          <Button size="sm" IconLeftComponent={KeyIcon}>
-            Rentals
-          </Button>
-        </HStack>
-      </VStack>
-    </VStack>
-  );
-};
+      ) : null}
 
-const NearbyDinner = () => {
-  const { colors } = useTheme();
-
-  const places: {
-    name: string;
-    reviews: number;
-    reviewsAvg: number;
-    address: string;
-    assetUrl: string;
-  }[] = [
-    {
-      name: "Fogón Asado",
-      reviews: 500,
-      reviewsAvg: 4.3,
-      assetUrl: "https://i.imgur.com/U1Raaqv.jpg",
-      address: "Calle Uriarte 1423, Buenos Aires Argentina",
-    },
-    {
-      name: "The Argentine Experience",
-      reviews: 2500,
-      reviewsAvg: 4.6,
-      assetUrl: "https://i.imgur.com/0M5Mty0.jpg",
-      address: "Fitz Roy 2110 Palermo Hollywood, Buenos Aires Argentina",
-    },
-    {
-      name: "Toro 777",
-      reviews: 329,
-      reviewsAvg: 4,
-      assetUrl: "https://i.imgur.com/8e4Y9tv.jpg",
-      address: "Fitz Roy 800, Buenos Aires Argentina",
-    },
-  ];
-  return (
-    <VStack space={4}>
-      <HStack alignItems={"center"}>
-        <TitleThree flex={1} fontWeight={"semibold"}>
-          Dinner nearby
-        </TitleThree>
-        <Button
-          alignSelf={"flex-end"}
-          width="auto"
-          textColor={useColorModeValue("primary.500", "primary.300")}
-          variant="tertiary"
-          size="sm"
-        >
-          More...
-        </Button>
-      </HStack>
-      <VStack space={2}>
-        {places.map((item) => (
-          <HStack key={item.name}>
+      <FlatList
+        data={results}
+        flexWrap={"wrap"}
+        numColumns={2}
+        contentContainerStyle={{ flexGrow: 1, width: "100%" }}
+        bounces={false}
+        ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
+        ListEmptyComponent={() => (
+          <Center width="full" flex={1}>
             <Image
-              alt={item.name}
-              height={106}
-              width={110}
-              source={{ uri: item.assetUrl }}
+              source={NoResultsIcon}
+              alt="No results to display"
+              width={screenWidth / 2}
+              height={screenWidth / 2}
+              resizeMode="contain"
             ></Image>
-            <VStack space={2} padding={3} flex={1} justifyContent="center">
-              <Body fontWeight={"medium"}>{item.name}</Body>
-              <HStack space={2} alignItems={"center"}>
-                <Score value={item.reviewsAvg}></Score>
-                <Footnote
-                  color={useColorModeValue(
-                    "primaryGray.600",
-                    "primaryGray.300"
-                  )}
-                >
-                  {item.reviews} reviews
-                </Footnote>
-              </HStack>
-              <HStack space={1}>
-                <LocationMarkerIcon
-                  size={16}
-                  color={useColorModeValue(
-                    colors.primaryGray["600"],
-                    colors.primaryGray["300"]
-                  )}
-                ></LocationMarkerIcon>
-                <Footnote
-                  color={useColorModeValue(
-                    "primaryGray.600",
-                    "primaryGray.300"
-                  )}
-                >
-                  {item.address}
-                </Footnote>
-              </HStack>
-            </VStack>
-          </HStack>
-        ))}
-      </VStack>
+            <Body textAlign="center" color={noResultsTextColor}>
+              No results to display for “{searchTerm}”
+            </Body>
+          </Center>
+        )}
+        renderItem={({ item, index }) => (
+          <Box
+            marginLeft={index % 2 == 0 ? 0 : 2}
+            marginRight={index % 2 == 0 ? 2 : 0}
+            width={`${imageWidth - 8}px`}
+          >
+            <VerticalCard
+              BadgeComponent={
+                <Button
+                  size="sm"
+                  IconLeftComponent={ShoppingBagIcon}
+                  width="auto"
+                  textColor="black"
+                ></Button>
+              }
+              AssetComponent={
+                <Image alt={item.title} source={{ uri: item.assetUrl }}></Image>
+              }
+              TitleComponent={<TitleThree>{item.title}</TitleThree>}
+            ></VerticalCard>
+          </Box>
+        )}
+      ></FlatList>
     </VStack>
   );
 };
 
-export default memo(SearchScreen);
+export default SearchScreen;
