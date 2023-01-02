@@ -11,6 +11,7 @@ const BackButton = () => {
       onPress={() => navigation.goBack()}
       IconLeftComponent={ChevronLeftIcon}
       size="sm"
+      textColor="primaryGray.900"
       width={"auto"}
     ></Button>
   );
