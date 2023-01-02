@@ -5,13 +5,14 @@ import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import FoodFiltersScreen from "../screens/FoodFiltersScreen";
 import { GlobalParamList } from "./GlobalParamList";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const ExploreStack = createStackNavigator<GlobalParamList>();
 const BrowseStack = createStackNavigator<GlobalParamList>();
 
 const ExploreStackScreen = () => {
   return (
-    <ExploreStack.Navigator initialRouteName={"Home"}>
+    <ExploreStack.Navigator initialRouteName={"Onboarding"}>
       <ExploreStack.Screen
         name="Home"
         component={HomeScreen}
