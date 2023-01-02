@@ -3,15 +3,10 @@ import {
   VStack,
   Image,
   TitleThree,
-  Subhead,
-  VerticalCard,
-  Badge,
-  Body,
   FlatList,
   Pressable,
   Box,
   Button,
-  HorizontalCard,
   HStack,
   useColorModeValue,
 } from "@spirokit/core";
@@ -21,21 +16,17 @@ import { ScreenNavigationProp } from "../navigation/GlobalParamList";
 
 export type CarouselItem = {
   assetUrl?: string;
-  title: string;
-  description?: string;
-  badge?: string;
   id: number;
+  alt?: string;
 };
 
 type CarouselProps = {
   title: string;
-  description?: string;
-  variant?: "vertical" | "horizontal";
   items: CarouselItem[];
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { title, description, items, variant = "vertical" } = props;
+  const { title, items } = props;
   const navigation = useNavigation<ScreenNavigationProp>();
   return (
     <VStack space={4}>
@@ -43,20 +34,12 @@ const Carousel: React.FC<CarouselProps> = (props) => {
         <HStack alignItems={"center"}>
           <VStack flex={1}>
             <TitleThree fontWeight={"semibold"}>{title}</TitleThree>
-            {description ? (
-              <Subhead
-                numberOfLines={2}
-                color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-              >
-                {description}
-              </Subhead>
-            ) : null}
           </VStack>
           <VStack>
             <Button
               alignSelf={"flex-end"}
               width="auto"
-              textColor={useColorModeValue("primary.500", "primary.300")}
+              textColor={useColorModeValue("primaryGray.900", "primary.300")}
               variant="tertiary"
               size="sm"
             >
@@ -83,59 +66,14 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                 shadow={1}
                 marginRight={4}
               >
-                <Box
-                  width={`${
-                    (Dimensions.get("screen").width *
-                      (variant == "horizontal" ? 4 : 3)) /
-                    5
-                  }px`}
-                >
-                  {variant == "vertical" ? (
-                    <VerticalCard
-                      contentMode="fixed"
-                      BadgeComponent={
-                        item.badge ? <Badge>{item.badge}</Badge> : undefined
-                      }
-                      AssetComponent={
-                        <Image
-                          alt={item.title}
-                          source={{ uri: item.assetUrl }}
-                        ></Image>
-                      }
-                      TitleComponent={
-                        <Body numberOfLines={2}>{item.title}</Body>
-                      }
-                      DescriptionComponent={
-                        item.description ? (
-                          <Subhead>{item.description}</Subhead>
-                        ) : undefined
-                      }
-                    ></VerticalCard>
-                  ) : (
-                    <HorizontalCard
-                      BadgeComponent={
-                        item.badge ? <Badge>{item.badge}</Badge> : undefined
-                      }
-                      AssetLeftComponent={
-                        <Image
-                          alt={item.title}
-                          source={{ uri: item.assetUrl }}
-                        ></Image>
-                      }
-                      TitleComponent={
-                        <Body fontWeight={"medium"} numberOfLines={2}>
-                          {item.title}
-                        </Body>
-                      }
-                      DescriptionComponent={
-                        item.description ? (
-                          <Subhead numberOfLines={5}>
-                            {item.description}
-                          </Subhead>
-                        ) : undefined
-                      }
-                    ></HorizontalCard>
-                  )}
+                <Box width={`${(Dimensions.get("screen").width * 3) / 5}px`}>
+                  <Image
+                    alt={item.alt}
+                    width="full"
+                    height={350}
+                    source={{ uri: item.assetUrl }}
+                    borderRadius="lg"
+                  ></Image>
                 </Box>
               </Pressable>
             )}
