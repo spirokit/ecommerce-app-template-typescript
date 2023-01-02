@@ -1,8 +1,8 @@
-# SpiroKit - Travel App Template with Typescript
+# SpiroKit - E-Commerce App Template with Typescript
 
-A SpiroKit Travel app template with Typescript
+A SpiroKit E-Commerce app template with Typescript
 
-![travel app banner image](https://i.imgur.com/0jCWLrc.png)
+![ecommerce app banner image](https://i.imgur.com/0jCWLrc.png)
 
 ## Usage
 
@@ -11,7 +11,7 @@ A SpiroKit Travel app template with Typescript
 2. Create a new project
 
 ```sh
-expo init my-app --template @spirokit/travel-app-template-typescript
+expo init my-app --template @spirokit/ecommerce-app-template-typescript
 ```
 
 3. Download the `spirokit-core-[version].tgz` file from Gumroad and add it to the root of your project.
