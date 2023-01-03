@@ -22,6 +22,9 @@ import {
   ShoppingBagIcon,
   TrashIcon,
 } from "react-native-heroicons/outline";
+
+import { FilterIcon as FilterIconSolid } from "react-native-heroicons/solid";
+
 import BackButton from "../components/BackButton";
 import {
   GlobalParamList,
@@ -72,12 +75,16 @@ type SearchProps = StackScreenProps<GlobalParamList, "Search">;
 
 const SearchScreen = (props: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState<string>();
+
+  const styles = {
+    filtersIconColor: useColorModeValue("primary.500", "primary.300"),
+  };
   const NoResultsIcon = useColorModeValue(
     NoResultsLightIcon,
     NoResultsDarkIcon
   );
   const noResultsTextColor = useColorModeValue(
-    "primaryGray.100",
+    "primaryGray.700",
     "primary.300"
   );
 
@@ -119,16 +126,19 @@ const SearchScreen = (props: SearchProps) => {
         ></SearchBox>
         <Button
           width="auto"
+          textColor={styles.filtersIconColor}
           variant="secondary"
           size="sm"
-          IconLeftComponent={FilterIcon}
+          IconLeftComponent={
+            activeFilters.length ? FilterIconSolid : FilterIcon
+          }
           onPress={() =>
             navigation.navigate("SearchFilters", { activeFilters })
           }
         ></Button>
       </HStack>
 
-      {activeFilters ? (
+      {activeFilters.length > 0 ? (
         <HStack
           width="full"
           space={4}

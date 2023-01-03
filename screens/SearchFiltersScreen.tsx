@@ -106,6 +106,10 @@ const SearchFilters = (props: SearchFilterProps) => {
     setActiveFilters([]);
   };
 
+  const styles = {
+    clearFiltersIconColor: useColorModeValue("primary.500", "primary.300"),
+  };
+
   return (
     <VStack
       height="full"
@@ -120,7 +124,8 @@ const SearchFilters = (props: SearchFilterProps) => {
             </TitleThree>
             <Button
               width="auto"
-              variant="secondary"
+              variant="tertiary"
+              textColor={styles.clearFiltersIconColor}
               size="sm"
               onPress={() => onClearFilters()}
               IconLeftComponent={TrashIcon}
