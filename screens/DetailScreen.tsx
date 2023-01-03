@@ -1,4 +1,5 @@
 import {
+  Body,
   Box,
   Button,
   Footnote,
@@ -6,26 +7,34 @@ import {
   Image,
   Pressable,
   Subhead,
-  TitleThree,
   TitleTwo,
   useColorModeValue,
   useTheme,
   VStack,
   ZStack,
 } from "@spirokit/core";
-import React, { memo } from "react";
-import { Alert, ScrollView } from "react-native";
+import React, { memo, useState } from "react";
+import { Dimensions, ScrollView } from "react-native";
 import {
-  CheckIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
-  ClockIcon,
-  DeviceMobileIcon,
-  UserGroupIcon,
+  HeartIcon,
+  ShareIcon,
 } from "react-native-heroicons/outline";
 import BackButton from "../components/BackButton";
 import Score from "../components/Score";
 
+const screenHeight = Dimensions.get("window").height;
+
 const DetailScreen = () => {
+  const [selectedSize, setSelectedSize] = useState<string>("M");
+  const [selectedColor, setSelectedColor] = useState<string>("red");
+  const [amount, setAmount] = useState<number>(1);
+
+  const styles = {
+    descriptionColor: useColorModeValue("primaryGray.700", "primaryGray.300"),
+  };
+
   const { colors } = useTheme();
   return (
     <ScrollView
@@ -40,16 +49,34 @@ const DetailScreen = () => {
       }}
     >
       <Box flex={1}>
-        <ZStack height={48} width="full" alignItems="flex-start">
+        <ZStack height={screenHeight / 2} width="full" alignItems="flex-start">
           <Image
             alt="details image"
-            source={{ uri: "https://i.imgur.com/C1oYr4L.jpg" }}
+            source={{ uri: "https://i.imgur.com/CpKlRgU.png" }}
             width="full"
-            height={48}
+            height={screenHeight / 2}
           ></Image>
-          <Box padding={4} safeArea>
+          <HStack
+            safeAreaTop
+            padding={4}
+            width="full"
+            justifyContent="space-between"
+            alignItems="flex-start"
+          >
             <BackButton></BackButton>
-          </Box>
+            <VStack space={2}>
+              <Button
+                size="sm"
+                textColor="black"
+                IconLeftComponent={ShareIcon}
+              ></Button>
+              <Button
+                size="sm"
+                textColor="black"
+                IconLeftComponent={HeartIcon}
+              ></Button>
+            </VStack>
+          </HStack>
         </ZStack>
         <VStack
           marginTop={-2}
@@ -61,42 +88,150 @@ const DetailScreen = () => {
           backgroundColor={useColorModeValue("white", "primaryDark.1")}
         >
           <Box>
-            <TitleTwo fontWeight={"bold"}>
-              Reykjavik Food Walk - Local Foodie Adventure in Iceland
-            </TitleTwo>
-            <Subhead>By Wake Up Reykjavik</Subhead>
-          </Box>
-
-          <ReviewsSummary></ReviewsSummary>
-
-          <Box width={"full"}>
-            <Subhead
-              color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-              flex={1}
+            <HStack
+              alignItems="center"
+              space={4}
+              justifyContent="space-between"
+              width="full"
             >
-              Explore Reykjavik’s abundance of food spots, and expand your
-              knowledge of Icelandic cuisine on this exciting food walk. No need
-              to worry about stopping to pay at each...
+              <Body fontWeight={"medium"}>Play T-Shirt - 2021</Body>
+              <AmountCounter
+                amount={amount}
+                onAmountChanged={(value) => setAmount(value)}
+              ></AmountCounter>
+            </HStack>
+            <Subhead marginBottom={2} color={styles.descriptionColor}>
+              Get ready to play hard in this bold white t-shirt featuring the
+              phrase "play hard" in bold, black letters.
             </Subhead>
-            <Button
-              size="sm"
-              alignSelf={"flex-end"}
-              variant="tertiary"
-              textColor={useColorModeValue("primary.500", "primary.300")}
-              width={"auto"}
-            >
-              Read more...
-            </Button>
+            <ReviewsSummary></ReviewsSummary>
+            <VStack space={6} paddingY={6}>
+              <SizeSelector
+                selectedSize={selectedSize}
+                onSizeSelected={(value) => setSelectedSize(value)}
+              ></SizeSelector>
+              <ColorSelector
+                selectedColor={selectedColor}
+                onColorSelected={(value) => setSelectedColor(value)}
+              ></ColorSelector>
+            </VStack>
           </Box>
-          <Features></Features>
-          <Highlights></Highlights>
-          <AdditionalLinks></AdditionalLinks>
-          <ReviewsSummary></ReviewsSummary>
-          <ReviewsComplete></ReviewsComplete>
+
           <CallToAction></CallToAction>
         </VStack>
       </Box>
     </ScrollView>
+  );
+};
+
+const SizeSelector = (props: {
+  selectedSize: string;
+  onSizeSelected: (value: string) => void;
+}) => {
+  const styles = {
+    selectedBorderColor: useColorModeValue("primary.500", "primary.300"),
+    borderColor: useColorModeValue("primary.500", "primaryGray.500"),
+    textColor: useColorModeValue("black", "primary.300"),
+    backgroundColor: useColorModeValue("primary.500", "primary.300"),
+  };
+  return (
+    <VStack space={1}>
+      <Subhead fontWeight="bold">Select size</Subhead>
+      <HStack space={2}>
+        {["S", "M", "L", "XL", "XXL"].map((size) => (
+          <Pressable
+            borderWidth={1}
+            backgroundColor={
+              props.selectedSize === size
+                ? styles.backgroundColor
+                : "transparent"
+            }
+            borderColor={
+              props.selectedSize === size
+                ? styles.selectedBorderColor
+                : styles.borderColor
+            }
+            onPress={() => props.onSizeSelected(size)}
+            paddingX={4}
+            paddingY={2}
+            borderRadius={8}
+          >
+            <Subhead color={styles.textColor}>{size}</Subhead>
+          </Pressable>
+        ))}
+      </HStack>
+    </VStack>
+  );
+};
+
+const ColorSelector = (props: {
+  selectedColor: string;
+  onColorSelected: (value: string) => void;
+}) => {
+  const styles = {
+    selectedBorderColor: useColorModeValue("primary.500", "primary.300"),
+    borderColor: useColorModeValue("primary.500", "primaryGray.500"),
+  };
+
+  const { colors } = useTheme();
+
+  return (
+    <VStack space={1}>
+      <Subhead fontWeight="bold">Select color</Subhead>
+      <HStack space={2} alignItems="center">
+        {[
+          colors.red[500],
+          colors.primaryGray[200],
+          colors.primaryGray[700],
+          colors.emerald[500],
+        ].map((color) => (
+          <Pressable
+            onPress={() => props.onColorSelected(color)}
+            borderWidth={props.selectedColor === color ? 2 : 0}
+            backgroundColor={color}
+            borderColor={
+              props.selectedColor === color
+                ? styles.selectedBorderColor
+                : styles.borderColor
+            }
+            padding={4}
+            borderRadius={"full"}
+          ></Pressable>
+        ))}
+      </HStack>
+    </VStack>
+  );
+};
+
+const AmountCounter = (props: {
+  amount: number;
+  onAmountChanged: (value: number) => void;
+}) => {
+  const styles = {
+    arrowsColor: useColorModeValue("primary.500", "primary.300"),
+  };
+  return (
+    <HStack alignItems="center">
+      <Button
+        width="auto"
+        textColor={styles.arrowsColor}
+        variant="tertiary"
+        IconLeftComponent={ChevronLeftIcon}
+        onPress={() => {
+          if (props.amount > 1) {
+            props.onAmountChanged(props.amount - 1);
+          }
+        }}
+      ></Button>
+      <Body fontWeight={"medium"}>{props.amount}</Body>
+      <Button
+        width="auto"
+        textColor={styles.arrowsColor}
+        variant="tertiary"
+        IconLeftComponent={ChevronRightIcon}
+        onPress={() => props.onAmountChanged(props.amount + 1)}
+      ></Button>
+    </HStack>
   );
 };
 
@@ -111,272 +246,18 @@ const ReviewsSummary = () => {
   );
 };
 
-const ReviewsComplete = () => {
-  return (
-    <VStack space={1}>
-      <HStack alignItems={"center"} space={2}>
-        <Subhead minWidth={24} lineHeight={"sm"}>
-          Excellent
-        </Subhead>
-        <Box
-          width={32}
-          height={2}
-          backgroundColor={useColorModeValue("primary.500", "primary.300")}
-          borderRadius={"full"}
-        ></Box>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <Subhead minWidth={24} lineHeight={"sm"}>
-          Very good
-        </Subhead>
-        <Box
-          width={8}
-          height={2}
-          backgroundColor={useColorModeValue("primary.500", "primary.300")}
-          borderRadius={"full"}
-        ></Box>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <Subhead minWidth={24} lineHeight={"sm"}>
-          Average
-        </Subhead>
-        <Box
-          width={6}
-          height={2}
-          backgroundColor={useColorModeValue("primary.500", "primary.300")}
-          borderRadius={"full"}
-        ></Box>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <Subhead minWidth={24} lineHeight={"sm"}>
-          Poor
-        </Subhead>
-        <Box
-          width={3}
-          height={2}
-          backgroundColor={useColorModeValue("primary.500", "primary.300")}
-          borderRadius={"full"}
-        ></Box>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <Subhead minWidth={24} lineHeight={"sm"}>
-          Terrible
-        </Subhead>
-        <Box
-          width={2}
-          height={2}
-          backgroundColor={useColorModeValue("primary.500", "primary.300")}
-          borderRadius={"full"}
-        ></Box>
-      </HStack>
-    </VStack>
-  );
-};
-
-const Features = () => {
-  const { colors } = useTheme();
-
-  return (
-    <VStack
-      borderWidth={1}
-      borderColor={useColorModeValue("primary.500", "primary.300")}
-      padding={2}
-      space={2}
-      borderRadius={8}
-    >
-      <HStack alignItems={"center"} space={2}>
-        <CheckIcon
-          color={useColorModeValue(
-            colors.primaryGray[600],
-            colors.primary[300]
-          )}
-        ></CheckIcon>
-        <Subhead color={useColorModeValue("primaryGray.600", "primary.300")}>
-          Free cancelation
-        </Subhead>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <UserGroupIcon
-          color={useColorModeValue(
-            colors.primaryGray[600],
-            colors.primary[300]
-          )}
-        ></UserGroupIcon>
-        <Subhead color={useColorModeValue("primaryGray.600", "primary.300")}>
-          All ages. max of 15 per group
-        </Subhead>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <ClockIcon
-          color={useColorModeValue(
-            colors.primaryGray[600],
-            colors.primary[300]
-          )}
-        ></ClockIcon>
-        <Subhead color={useColorModeValue("primaryGray.600", "primary.300")}>
-          Duration: 1h 30m
-        </Subhead>
-      </HStack>
-      <HStack alignItems={"center"} space={2}>
-        <DeviceMobileIcon
-          color={useColorModeValue(
-            colors.primaryGray[600],
-            colors.primary[300]
-          )}
-        ></DeviceMobileIcon>
-        <Subhead color={useColorModeValue("primaryGray.600", "primary.300")}>
-          Mobile ticket
-        </Subhead>
-      </HStack>
-    </VStack>
-  );
-};
-
-const Highlights = () => {
-  return (
-    <Box>
-      <TitleThree marginBottom={2}>Highlights</TitleThree>
-      <VStack space={2}>
-        <HStack alignItems={"center"} space={2}>
-          <CheckIcon color={useColorModeValue("black", "white")}></CheckIcon>
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          >
-            Free cancelation
-          </Subhead>
-        </HStack>
-        <HStack alignItems={"center"} space={2}>
-          <CheckIcon color={useColorModeValue("black", "white")}></CheckIcon>
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          >
-            All ages. max of 15 per group
-          </Subhead>
-        </HStack>
-        <HStack alignItems={"center"} space={2}>
-          <CheckIcon color={useColorModeValue("black", "white")}></CheckIcon>
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          >
-            Duration: 1h 30m
-          </Subhead>
-        </HStack>
-        <HStack alignItems={"center"} space={2}>
-          <CheckIcon color={useColorModeValue("black", "white")}></CheckIcon>
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          >
-            Mobile ticket
-          </Subhead>
-        </HStack>
-      </VStack>
-    </Box>
-  );
-};
-
-const AdditionalLinks = () => {
-  return (
-    <VStack
-      borderTopColor={"primaryGray.700"}
-      borderTopWidth={1}
-      borderBottomColor={useColorModeValue(
-        "primaryGray.500",
-        "primaryGray.700"
-      )}
-      borderBottomWidth={1}
-    >
-      <Pressable onPress={() => Alert.alert("What’s included? tapped")}>
-        <HStack
-          alignItems={"center"}
-          padding={2}
-          borderBottomColor={useColorModeValue(
-            "primaryGray.500",
-            "primaryGray.700"
-          )}
-          borderBottomWidth={1}
-        >
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-            flex={1}
-          >
-            What’s included?
-          </Subhead>
-          <ChevronRightIcon
-            color={useColorModeValue("black", "white")}
-          ></ChevronRightIcon>
-        </HStack>
-      </Pressable>
-      <Pressable onPress={() => Alert.alert("Departure and return tapped")}>
-        <HStack
-          alignItems={"center"}
-          padding={2}
-          borderBottomColor={useColorModeValue(
-            "primaryGray.500",
-            "primaryGray.700"
-          )}
-          borderBottomWidth={1}
-        >
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-            flex={1}
-          >
-            Departure and return
-          </Subhead>
-          <ChevronRightIcon
-            color={useColorModeValue("black", "white")}
-          ></ChevronRightIcon>
-        </HStack>
-      </Pressable>
-      <Pressable onPress={() => Alert.alert("Accessibility tapped")}>
-        <HStack
-          alignItems={"center"}
-          padding={2}
-          borderBottomColor={useColorModeValue(
-            "primaryGray.500",
-            "primaryGray.700"
-          )}
-          borderBottomWidth={1}
-        >
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-            flex={1}
-          >
-            Accessibility
-          </Subhead>
-          <ChevronRightIcon
-            color={useColorModeValue("black", "white")}
-          ></ChevronRightIcon>
-        </HStack>
-      </Pressable>
-      <Pressable onPress={() => Alert.alert("Additional information tapped")}>
-        <HStack alignItems={"center"} padding={2}>
-          <Subhead
-            color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-            flex={1}
-          >
-            Additional information
-          </Subhead>
-          <ChevronRightIcon
-            color={useColorModeValue("black", "white")}
-          ></ChevronRightIcon>
-        </HStack>
-      </Pressable>
-    </VStack>
-  );
-};
-
 const CallToAction = () => {
   return (
     <HStack paddingY={4} alignItems={"center"} space={4}>
       <VStack flex={1}>
-        <TitleTwo fontWeight={"bold"}>$119.00</TitleTwo>
         <Subhead
           color={useColorModeValue("primaryGray.600", "primaryGray.300")}
         >
-          per adult
+          Total Price
         </Subhead>
+        <TitleTwo fontWeight={"bold"}>$29,00</TitleTwo>
       </VStack>
-      <Button width={"auto"}>Check availability</Button>
+      <Button width={"auto"}>Add to Bag</Button>
     </HStack>
   );
 };
