@@ -17,6 +17,7 @@ export type GlobalParamList = {
   SignIn: {};
   SignUp: {};
   VerifyAccount: {};
+  More: {};
 };
 
 export type ScreenNavigationProp = StackNavigationProp<GlobalParamList>;

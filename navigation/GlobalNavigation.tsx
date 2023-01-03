@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
+import MoreScreen from "../screens/MoreScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import SearchFiltersScreen from "../screens/SearchFiltersScreen";
 import SearchScreen from "../screens/SearchScreen";
@@ -13,7 +14,7 @@ import NavBar from "./NavBar";
 const GlobalNavigation = () => {
   const Stack = createStackNavigator<GlobalParamList>();
   return (
-    <Stack.Navigator initialRouteName="Search">
+    <Stack.Navigator initialRouteName="More">
       <Stack.Screen
         options={{ headerShown: false }}
         name="Onboarding"
@@ -53,6 +54,11 @@ const GlobalNavigation = () => {
         options={{ header: () => <NavBar></NavBar> }}
         name="SearchFilters"
         component={SearchFiltersScreen}
+      ></Stack.Screen>
+      <Stack.Screen
+        options={{ header: () => <NavBar></NavBar> }}
+        name="More"
+        component={MoreScreen}
       ></Stack.Screen>
     </Stack.Navigator>
   );

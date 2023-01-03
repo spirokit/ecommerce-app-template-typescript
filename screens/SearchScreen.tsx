@@ -13,7 +13,6 @@ import {
   SearchBox,
   Badge,
   Body,
-  useColorMode,
   Center,
 } from "@spirokit/core";
 import React, { useEffect, useState } from "react";
