@@ -12,7 +12,7 @@ import {
   Input,
 } from "@spirokit/core";
 import React, { useState } from "react";
-import { Dimensions, ScrollView } from "react-native";
+import { Dimensions } from "react-native";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -70,6 +70,8 @@ const Checkout = () => {
               ButtonComponent={<Button>Check</Button>}
               placeholder="Coupon code"
             ></Input>
+            <PurchaseResume></PurchaseResume>
+            <Button>Checkout</Button>
           </VStack>
         )}
         ListHeaderComponentStyle={{
@@ -89,6 +91,64 @@ const Checkout = () => {
         )}
       ></FlatList>
     </Box>
+  );
+};
+
+const PurchaseResume = () => {
+  const styles = {
+    totalPriceColor: useColorModeValue("primary.500", "primary.300"),
+  };
+  return (
+    <VStack borderTopColor={"primaryGray.700"}>
+      <HStack alignItems={"center"} padding={2}>
+        <Subhead
+          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
+          flex={1}
+        >
+          Subtotal:
+        </Subhead>
+        <Subhead>$101.97</Subhead>
+      </HStack>
+      <HStack alignItems={"center"} padding={2}>
+        <Subhead
+          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
+          flex={1}
+        >
+          Delivery fee:
+        </Subhead>
+
+        <Subhead>$9.99</Subhead>
+      </HStack>
+      <HStack
+        alignItems={"center"}
+        padding={2}
+        borderBottomColor={useColorModeValue(
+          "primaryGray.500",
+          "primaryGray.700"
+        )}
+        borderBottomWidth={1}
+      >
+        <Subhead
+          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
+          flex={1}
+        >
+          Discount
+        </Subhead>
+
+        <Subhead>-$15.99</Subhead>
+      </HStack>
+      <HStack alignItems={"center"} padding={2}>
+        <Subhead
+          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
+          flex={1}
+        >
+          Total
+        </Subhead>
+        <Body color={styles.totalPriceColor} fontWeight="bold">
+          $95.97
+        </Body>
+      </HStack>
+    </VStack>
   );
 };
 
@@ -144,19 +204,18 @@ const ShoppingBagItem = (
         height={screenHeight / 5}
         source={{ uri: props.assetUrl }}
       ></Image>
-      <VStack justifyContent="space-between" flex={1} paddingX={3} paddingY={2}>
+      <VStack justifyContent="space-between" flex={1} padding={4}>
         <HStack flex={1} justifyContent="space-between" alignItems="flex-start">
           <VStack flex={1} space={2}>
             <Body fontWeight="medium" flex={1}>
               {props.title}
             </Body>
-
             <Box flex={1}></Box>
             <Subhead>
-              ${props.price * props.amount}
+              ${(props.price * props.amount).toFixed(2)}
               {props.amount > 1 ? (
                 <Subhead color={styles.priceDisclaimerTextColor}>
-                  ({props.price} x {props.amount})
+                  ({props.price.toFixed(2)} x {props.amount})
                 </Subhead>
               ) : null}
             </Subhead>
@@ -165,35 +224,45 @@ const ShoppingBagItem = (
               {props.size}
             </Subhead>
             <Box flex={1}></Box>
-            <HStack alignItems="center">
-              <Button
-                width="auto"
-                textColor={styles.arrowsColor}
-                variant="tertiary"
-                IconLeftComponent={ChevronLeftIcon}
-                onPress={() => {
-                  if (props.amount > 1) {
-                    props.onAmountUpdated(props.amount - 1);
-                  }
-                }}
-              ></Button>
-              <Body fontWeight={"medium"}>{props.amount}</Body>
-              <Button
-                width="auto"
-                textColor={styles.arrowsColor}
-                variant="tertiary"
-                IconLeftComponent={ChevronRightIcon}
-                onPress={() => props.onAmountUpdated(props.amount + 1)}
-              ></Button>
-            </HStack>
           </VStack>
 
           <Button
             width="auto"
+            marginRight={-2}
+            marginTop={-2}
             size="sm"
             textColor={styles.iconColor}
             variant="tertiary"
             IconLeftComponent={TrashIcon}
+          ></Button>
+        </HStack>
+        <HStack
+          marginRight={-2}
+          marginBottom={-2}
+          space={2}
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <Button
+            width="auto"
+            textColor={styles.arrowsColor}
+            variant="tertiary"
+            size="sm"
+            IconLeftComponent={ChevronLeftIcon}
+            onPress={() => {
+              if (props.amount > 1) {
+                props.onAmountUpdated(props.amount - 1);
+              }
+            }}
+          ></Button>
+          <Body fontWeight={"medium"}>{props.amount}</Body>
+          <Button
+            width="auto"
+            size="sm"
+            textColor={styles.arrowsColor}
+            variant="tertiary"
+            IconLeftComponent={ChevronRightIcon}
+            onPress={() => props.onAmountUpdated(props.amount + 1)}
           ></Button>
         </HStack>
       </VStack>

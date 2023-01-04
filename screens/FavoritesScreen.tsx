@@ -104,7 +104,7 @@ const FavoriteItem = (props: Favorite & { index: number }) => {
         </HStack>
         <HStack alignItems="flex-end" justifyContent="space-between">
           <Body fontWeight="medium" flex={1}>
-            ${props.price}
+            ${props.price.toFixed(2)}
           </Body>
           <Button
             width="auto"
