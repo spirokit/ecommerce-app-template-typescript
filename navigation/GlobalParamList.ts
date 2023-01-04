@@ -18,6 +18,7 @@ export type GlobalParamList = {
   SignUp: {};
   VerifyAccount: {};
   More: {};
+  Favorites: {};
 };
 
 export type ScreenNavigationProp = StackNavigationProp<GlobalParamList>;
