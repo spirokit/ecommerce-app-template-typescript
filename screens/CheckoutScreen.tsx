@@ -10,6 +10,7 @@ import {
   Box,
   Subhead,
   Input,
+  useDisclose,
 } from "@spirokit/core";
 import React, { useState } from "react";
 import { Dimensions } from "react-native";
@@ -19,6 +20,8 @@ import {
   TrashIcon,
 } from "react-native-heroicons/outline";
 import BackButton from "../components/BackButton";
+import PaymentSheet from "../components/PaymentSheet";
+import { PurchaseResume } from "../components/PurchaseResume";
 
 type ShoppingBagItem = {
   id: number;
@@ -33,6 +36,7 @@ const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("screen").width;
 
 const Checkout = () => {
+  const { isOpen, onClose, onToggle } = useDisclose();
   const [shoppingBag, setShoppingBag] =
     useState<ShoppingBagItem[]>(initialItems);
 
@@ -56,99 +60,46 @@ const Checkout = () => {
     setShoppingBag([]);
   };
   return (
-    <Box safeAreaBottom flex={1} background={styles.background}>
-      <FlatList
-        flex={1}
-        paddingX={4}
-        ListHeaderComponent={() => (
-          <Header onClearShoppingBag={onClearShoppingBag}></Header>
-        )}
-        ListFooterComponent={() => (
-          <VStack space={6} paddingY={6}>
-            <Input
-              LabelComponent={<Subhead>Have a coupon code? Enter here</Subhead>}
-              ButtonComponent={<Button>Check</Button>}
-              placeholder="Coupon code"
-            ></Input>
-            <PurchaseResume></PurchaseResume>
-            <Button>Checkout</Button>
-          </VStack>
-        )}
-        ListHeaderComponentStyle={{
-          paddingTop: 16,
-          paddingBottom: 24,
-        }}
-        data={shoppingBag}
-        contentContainerStyle={{ flexGrow: 1, width: "100%" }}
-        ItemSeparatorComponent={() => <Box height={4}></Box>}
-        bounces={false}
-        renderItem={({ item, index }) => (
-          <ShoppingBagItem
-            {...item}
-            index={index}
-            onAmountUpdated={(value) => onItemAmountUpdated(item.id, value)}
-          ></ShoppingBagItem>
-        )}
-      ></FlatList>
-    </Box>
-  );
-};
-
-const PurchaseResume = () => {
-  const styles = {
-    totalPriceColor: useColorModeValue("primary.500", "primary.300"),
-  };
-  return (
-    <VStack borderTopColor={"primaryGray.700"}>
-      <HStack alignItems={"center"} padding={2}>
-        <Subhead
-          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
+    <>
+      <Box safeAreaBottom flex={1} background={styles.background}>
+        <FlatList
           flex={1}
-        >
-          Subtotal:
-        </Subhead>
-        <Subhead>$101.97</Subhead>
-      </HStack>
-      <HStack alignItems={"center"} padding={2}>
-        <Subhead
-          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          flex={1}
-        >
-          Delivery fee:
-        </Subhead>
-
-        <Subhead>$9.99</Subhead>
-      </HStack>
-      <HStack
-        alignItems={"center"}
-        padding={2}
-        borderBottomColor={useColorModeValue(
-          "primaryGray.500",
-          "primaryGray.700"
-        )}
-        borderBottomWidth={1}
-      >
-        <Subhead
-          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          flex={1}
-        >
-          Discount
-        </Subhead>
-
-        <Subhead>-$15.99</Subhead>
-      </HStack>
-      <HStack alignItems={"center"} padding={2}>
-        <Subhead
-          color={useColorModeValue("primaryGray.600", "primaryGray.300")}
-          flex={1}
-        >
-          Total
-        </Subhead>
-        <Body color={styles.totalPriceColor} fontWeight="bold">
-          $95.97
-        </Body>
-      </HStack>
-    </VStack>
+          paddingX={4}
+          ListHeaderComponent={() => (
+            <Header onClearShoppingBag={onClearShoppingBag}></Header>
+          )}
+          ListFooterComponent={() => (
+            <VStack space={6} paddingY={6}>
+              <Input
+                LabelComponent={
+                  <Subhead>Have a coupon code? Enter here</Subhead>
+                }
+                ButtonComponent={<Button>Check</Button>}
+                placeholder="Coupon code"
+              ></Input>
+              <PurchaseResume></PurchaseResume>
+              <Button onPress={() => onToggle()}>Checkout</Button>
+            </VStack>
+          )}
+          ListHeaderComponentStyle={{
+            paddingTop: 16,
+            paddingBottom: 24,
+          }}
+          data={shoppingBag}
+          contentContainerStyle={{ flexGrow: 1, width: "100%" }}
+          ItemSeparatorComponent={() => <Box height={4}></Box>}
+          bounces={false}
+          renderItem={({ item, index }) => (
+            <ShoppingBagItem
+              {...item}
+              index={index}
+              onAmountUpdated={(value) => onItemAmountUpdated(item.id, value)}
+            ></ShoppingBagItem>
+          )}
+        ></FlatList>
+      </Box>
+      <PaymentSheet isOpen={isOpen} onClose={onClose}></PaymentSheet>
+    </>
   );
 };
 
@@ -190,6 +141,7 @@ const ShoppingBagItem = (
       "primaryGray.400"
     ),
   };
+
   return (
     <HStack
       key={`${props.assetUrl}-${props.index}`}

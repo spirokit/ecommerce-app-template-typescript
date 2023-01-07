@@ -20,6 +20,7 @@ export type GlobalParamList = {
   More: {};
   Favorites: {};
   Checkout: {};
+  AddPaymentMethod: {};
 };
 
 export type ScreenNavigationProp = StackNavigationProp<GlobalParamList>;
