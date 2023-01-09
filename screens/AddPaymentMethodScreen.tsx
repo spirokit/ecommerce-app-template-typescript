@@ -6,12 +6,14 @@ import {
   Subhead,
   KeyboardAvoidingView,
   Button,
+  TitleTwo,
 } from "@spirokit/core";
 import React, { useState } from "react";
 import { Platform, ScrollView } from "react-native";
 import CreditCard, { CreditCardProps } from "../components/CreditCard";
 
 import { useHeaderHeight } from "@react-navigation/elements";
+import BackButton from "../components/BackButton";
 
 const AddPaymentMethod = () => {
   const [cardInfo, setCardInfo] = useState<Partial<CreditCardProps>>({});
@@ -46,12 +48,21 @@ const AddPaymentMethod = () => {
             "primaryDark.0"
           )}
         >
+          <HStack
+            padding={4}
+            width="full"
+            space={4}
+            alignItems="center"
+            backgroundColor={useColorModeValue("white", "primaryDark.0")}
+          >
+            <BackButton></BackButton>
+            <TitleTwo fontWeight={"bold"}>Add Payment Method</TitleTwo>
+          </HStack>
           <CreditCard
             cardNumber={cardInfo.cardNumber}
             expiresOn={cardInfo.expiresOn}
             holderName={cardInfo.holderName}
           ></CreditCard>
-
           <VStack space={4} flex={1}>
             <Input
               placeholder="Card number..."
