@@ -11,6 +11,8 @@ import {
   Subhead,
   Input,
   useDisclose,
+  Alert,
+  TitleOne,
 } from "@spirokit/core";
 import React, { useState } from "react";
 import { Dimensions } from "react-native";
@@ -37,8 +39,16 @@ const screenWidth = Dimensions.get("screen").width;
 
 const Checkout = () => {
   const { isOpen, onClose, onToggle } = useDisclose();
+
+  const [showConfirmationModal, setShowConfirmationModal] =
+    useState<boolean>(false);
+
   const [shoppingBag, setShoppingBag] =
     useState<ShoppingBagItem[]>(initialItems);
+
+  const onConfirm = () => {
+    setShowConfirmationModal(true);
+  };
 
   const styles = {
     iconColor: useColorModeValue("primary.500", "primary.300"),
@@ -98,7 +108,24 @@ const Checkout = () => {
           )}
         ></FlatList>
       </Box>
-      <PaymentSheet isOpen={isOpen} onClose={onClose}></PaymentSheet>
+      <PaymentSheet
+        isOpen={isOpen}
+        onConfirm={onConfirm}
+        onClose={onClose}
+      ></PaymentSheet>
+      <Alert
+        onClose={() => setShowConfirmationModal(false)}
+        SubheadingComponent={
+          <Body textAlign="center">
+            Check your email. You’ll get all the details to track your order.
+          </Body>
+        }
+        ConfirmButtonComponent={
+          <Button onPress={() => setShowConfirmationModal(false)}>Ok</Button>
+        }
+        isVisible={showConfirmationModal}
+        TitleComponent={<TitleOne>Payment received</TitleOne>}
+      ></Alert>
     </>
   );
 };
