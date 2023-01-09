@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import AddDeliveryAddress from "../screens/AddDeliveryAddressScreen";
 import AddPaymentMethod from "../screens/AddPaymentMethodScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 import DetailScreen from "../screens/DetailScreen";
@@ -18,7 +19,7 @@ import NavBar from "./NavBar";
 const GlobalNavigation = () => {
   const Stack = createStackNavigator<GlobalParamList>();
   return (
-    <Stack.Navigator initialRouteName="AddPaymentMethod">
+    <Stack.Navigator initialRouteName="Checkout">
       <Stack.Screen
         options={{ headerShown: false }}
         name="Onboarding"
@@ -83,6 +84,11 @@ const GlobalNavigation = () => {
         options={{ header: () => <NavBar></NavBar> }}
         name="AddPaymentMethod"
         component={AddPaymentMethod}
+      ></Stack.Screen>
+      <Stack.Screen
+        options={{ header: () => <NavBar></NavBar> }}
+        name="AddDeliveryAddress"
+        component={AddDeliveryAddress}
       ></Stack.Screen>
     </Stack.Navigator>
   );
