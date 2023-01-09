@@ -28,7 +28,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { PurchaseResume } from "./PurchaseResume";
 
 const screenHeight = Dimensions.get("screen").height;
-const PaymentSheet = (props: { isOpen: boolean; onClose: () => void }) => {
+const PaymentSheet = (props: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) => {
   const [selectedCard, setSelectedCard] = useState<CreditCard>();
 
   const styles = {
@@ -69,7 +73,15 @@ const PaymentSheet = (props: { isOpen: boolean; onClose: () => void }) => {
               backgroundColor={styles.separatorColor}
             ></Box>
             <PurchaseResume></PurchaseResume>
-            <Button minWidth="full">Make a payment</Button>
+            <Button
+              onPress={() => {
+                props.onClose();
+                props.onConfirm();
+              }}
+              minWidth="full"
+            >
+              Make a payment
+            </Button>
           </VStack>
         </ScrollView>
       </ActionSheet.Content>
