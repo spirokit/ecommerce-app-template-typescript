@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   Box,
   Button,
@@ -13,6 +14,8 @@ import LogoBlack from "../assets/logo-black.png";
 import LogoWhite from "../assets/logo-white.png";
 
 const NavBar = () => {
+  const navigation = useNavigation<any>();
+  const navState = navigation.getState();
   const [containerHeight, setContainerHeight] = useState<number>();
   const styles = {
     bgColor: useColorModeValue("white", "primaryDark.1"),
@@ -35,6 +38,11 @@ const NavBar = () => {
       <HStack safeAreaTop alignItems="center" paddingX={4} paddingY={2}>
         <Spacer></Spacer>
         <Button
+          onPress={() =>
+            navigation.navigate(navState.routes[navState.index].name, {
+              screen: "Checkout",
+            })
+          }
           IconLeftComponent={ShoppingBagIcon}
           size="sm"
           width="auto"

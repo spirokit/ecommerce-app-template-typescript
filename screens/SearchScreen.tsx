@@ -14,6 +14,7 @@ import {
   Badge,
   Body,
   Center,
+  Pressable,
 } from "@spirokit/core";
 import React, { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
@@ -114,55 +115,56 @@ const SearchScreen = (props: SearchProps) => {
     <VStack
       space={4}
       padding={4}
-      safeAreaBottom
       flex={1}
       backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
     >
-      <HStack space={4} alignItems="center">
-        <BackButton></BackButton>
-        <SearchBox
-          onChangeText={(searchTerm) => onSearchByTerm(searchTerm)}
-          flex={1}
-        ></SearchBox>
-        <Button
-          width="auto"
-          textColor={styles.filtersIconColor}
-          variant="secondary"
-          size="sm"
-          IconLeftComponent={
-            activeFilters.length ? FilterIconSolid : FilterIcon
-          }
-          onPress={() =>
-            navigation.navigate("SearchFilters", { activeFilters })
-          }
-        ></Button>
-      </HStack>
-
-      {activeFilters.length > 0 ? (
-        <HStack
-          width="full"
-          space={4}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <HStack space={2} flex={1} flexWrap="wrap">
-            {activeFilters.map((af, index) => (
-              <Badge marginY={1} key={`${af.type}-${af.value}-${index}`}>
-                {af.value}
-              </Badge>
-            ))}
-          </HStack>
+      <VStack space={4}>
+        <HStack space={4} alignItems="center">
+          <BackButton></BackButton>
+          <SearchBox
+            onChangeText={(searchTerm) => onSearchByTerm(searchTerm)}
+            flex={1}
+          ></SearchBox>
           <Button
-            size="sm"
-            variant="secondary"
             width="auto"
-            IconLeftComponent={TrashIcon}
-            onPress={() => onClearActiveFilters()}
+            textColor={styles.filtersIconColor}
+            variant="secondary"
+            size="sm"
+            IconLeftComponent={
+              activeFilters.length ? FilterIconSolid : FilterIcon
+            }
+            onPress={() =>
+              navigation.navigate("SearchFilters", { activeFilters })
+            }
           ></Button>
         </HStack>
-      ) : null}
 
+        {activeFilters.length > 0 ? (
+          <HStack
+            width="full"
+            space={4}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <HStack space={2} flex={1} flexWrap="wrap">
+              {activeFilters.map((af, index) => (
+                <Badge marginY={1} key={`${af.type}-${af.value}-${index}`}>
+                  {af.value}
+                </Badge>
+              ))}
+            </HStack>
+            <Button
+              size="sm"
+              variant="secondary"
+              width="auto"
+              IconLeftComponent={TrashIcon}
+              onPress={() => onClearActiveFilters()}
+            ></Button>
+          </HStack>
+        ) : null}
+      </VStack>
       <FlatList
+        ListFooterComponent={() => <Box safeAreaBottom></Box>}
         data={results}
         flexWrap={"wrap"}
         numColumns={2}
@@ -184,26 +186,31 @@ const SearchScreen = (props: SearchProps) => {
           </Center>
         )}
         renderItem={({ item, index }) => (
-          <Box
-            marginLeft={index % 2 == 0 ? 0 : 2}
-            marginRight={index % 2 == 0 ? 2 : 0}
-            width={`${imageWidth - 8}px`}
-          >
-            <VerticalCard
-              BadgeComponent={
-                <Button
-                  size="sm"
-                  IconLeftComponent={ShoppingBagIcon}
-                  width="auto"
-                  textColor="black"
-                ></Button>
-              }
-              AssetComponent={
-                <Image alt={item.title} source={{ uri: item.assetUrl }}></Image>
-              }
-              TitleComponent={<TitleThree>{item.title}</TitleThree>}
-            ></VerticalCard>
-          </Box>
+          <Pressable onPress={() => navigation.navigate("Detail")}>
+            <Box
+              marginLeft={index % 2 == 0 ? 0 : 2}
+              marginRight={index % 2 == 0 ? 2 : 0}
+              width={`${imageWidth - 8}px`}
+            >
+              <VerticalCard
+                BadgeComponent={
+                  <Button
+                    size="sm"
+                    IconLeftComponent={ShoppingBagIcon}
+                    width="auto"
+                    textColor="black"
+                  ></Button>
+                }
+                AssetComponent={
+                  <Image
+                    alt={item.title}
+                    source={{ uri: item.assetUrl }}
+                  ></Image>
+                }
+                TitleComponent={<TitleThree>{item.title}</TitleThree>}
+              ></VerticalCard>
+            </Box>
+          </Pressable>
         )}
       ></FlatList>
     </VStack>

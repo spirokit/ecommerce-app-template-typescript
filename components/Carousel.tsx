@@ -12,7 +12,6 @@ import {
 } from "@spirokit/core";
 import React, { memo } from "react";
 import { Dimensions } from "react-native";
-import { ScreenNavigationProp } from "../navigation/GlobalParamList";
 
 export type CarouselItem = {
   assetUrl?: string;
@@ -27,7 +26,7 @@ type CarouselProps = {
 
 const Carousel: React.FC<CarouselProps> = (props) => {
   const { title, items } = props;
-  const navigation = useNavigation<ScreenNavigationProp>();
+  const navigation = useNavigation();
   return (
     <VStack space={4}>
       <VStack space={4}>
@@ -39,6 +38,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
             <Button
               alignSelf={"flex-end"}
               width="auto"
+              onPress={() => navigation.navigate("Section", { title })}
               textColor={useColorModeValue("primaryGray.900", "primary.300")}
               variant="tertiary"
               size="sm"

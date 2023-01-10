@@ -1,14 +1,20 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { memo } from "react";
-import TabBar from "../components/TabBar";
-import { BrowseStackScreen, ExploreStackScreen } from "./Stacks";
+import NavBar from "./NavBar";
+import {
+  SearchStackScreen,
+  ExploreStackScreen,
+  FavoritesStackScreen,
+  MoreStackScreen,
+} from "./Stacks";
+import TabBar from "./TabBar";
 
 const Tab = createBottomTabNavigator();
 
 const TabBarNavigation: React.FC = () => {
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ header: () => <NavBar></NavBar> }}
       tabBar={(props) => <TabBar {...props} />}
     >
       <Tab.Screen
@@ -17,9 +23,19 @@ const TabBarNavigation: React.FC = () => {
         component={ExploreStackScreen}
       />
       <Tab.Screen
-        name="BrowseTab"
-        options={{ tabBarLabel: "Browse" }}
-        component={BrowseStackScreen}
+        name="SearchTab"
+        options={{ tabBarLabel: "Search" }}
+        component={SearchStackScreen}
+      />
+      <Tab.Screen
+        name="FavoritesTab"
+        options={{ tabBarLabel: "Favorites" }}
+        component={FavoritesStackScreen}
+      />
+      <Tab.Screen
+        name="MoreTab"
+        options={{ tabBarLabel: "More" }}
+        component={MoreStackScreen}
       />
     </Tab.Navigator>
   );

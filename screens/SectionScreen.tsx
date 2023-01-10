@@ -1,4 +1,3 @@
-import { RouteProp } from "@react-navigation/native";
 import {
   HStack,
   TitleThree,
@@ -9,6 +8,7 @@ import {
   VerticalCard,
   Box,
   Button,
+  Pressable,
 } from "@spirokit/core";
 import React from "react";
 import { Dimensions, View } from "react-native";
@@ -17,6 +17,7 @@ import BackButton from "../components/BackButton";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 import { GlobalParamList } from "../navigation/GlobalParamList";
+import { useNavigation } from "@react-navigation/native";
 
 type SectionProps = StackScreenProps<GlobalParamList, "Section">;
 
@@ -56,6 +57,7 @@ const items: { id: number; assetUrl: string; title: string }[] = [
 
 const SectionScreen = (props: SectionProps) => {
   const { route } = props;
+  const navigation = useNavigation();
 
   const title = route.params?.title || "Best Sellers";
 
@@ -63,7 +65,6 @@ const SectionScreen = (props: SectionProps) => {
     <VStack
       space={4}
       padding={4}
-      safeAreaBottom
       flex={1}
       backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
     >
@@ -79,26 +80,31 @@ const SectionScreen = (props: SectionProps) => {
         bounces={false}
         ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
         renderItem={({ item, index }) => (
-          <Box
-            marginLeft={index % 2 == 0 ? 0 : 2}
-            marginRight={index % 2 == 0 ? 2 : 0}
-            width={`${imageWidth - 8}px`}
-          >
-            <VerticalCard
-              BadgeComponent={
-                <Button
-                  size="sm"
-                  IconLeftComponent={ShoppingBagIcon}
-                  width="auto"
-                  textColor="black"
-                ></Button>
-              }
-              AssetComponent={
-                <Image alt={item.title} source={{ uri: item.assetUrl }}></Image>
-              }
-              TitleComponent={<TitleThree>{item.title}</TitleThree>}
-            ></VerticalCard>
-          </Box>
+          <Pressable onPress={() => navigation.navigate("Detail")}>
+            <Box
+              marginLeft={index % 2 == 0 ? 0 : 2}
+              marginRight={index % 2 == 0 ? 2 : 0}
+              width={`${imageWidth - 8}px`}
+            >
+              <VerticalCard
+                BadgeComponent={
+                  <Button
+                    size="sm"
+                    IconLeftComponent={ShoppingBagIcon}
+                    width="auto"
+                    textColor="black"
+                  ></Button>
+                }
+                AssetComponent={
+                  <Image
+                    alt={item.title}
+                    source={{ uri: item.assetUrl }}
+                  ></Image>
+                }
+                TitleComponent={<TitleThree>{item.title}</TitleThree>}
+              ></VerticalCard>
+            </Box>
+          </Pressable>
         )}
       ></FlatList>
     </VStack>

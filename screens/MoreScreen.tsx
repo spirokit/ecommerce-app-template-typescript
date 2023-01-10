@@ -29,13 +29,12 @@ import { GlobalParamList } from "../navigation/GlobalParamList";
 
 type MoreProps = StackScreenProps<GlobalParamList, "More">;
 
-const MoreScreen = (props: MoreProps) => {
+const More = (props: MoreProps) => {
   const { navigation } = props;
   return (
     <VStack
       space={4}
       padding={4}
-      safeAreaBottom
       flex={1}
       backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
     >
@@ -44,7 +43,6 @@ const MoreScreen = (props: MoreProps) => {
         email="mauro@spirokit.com"
       ></AccountHeaderCard>
       <AccountOptions navigation={navigation}></AccountOptions>
-      <AccountHelpCard></AccountHelpCard>
     </VStack>
   );
 };
@@ -148,6 +146,7 @@ const AccountOptions = (props: { navigation: StackNavigationProp<any> }) => {
   return (
     <FlatList
       data={options}
+      ListFooterComponent={() => <AccountHelpCard></AccountHelpCard>}
       ItemSeparatorComponent={() => (
         <Box
           marginY={4}
@@ -191,6 +190,7 @@ const AccountHelpCard = () => {
   };
   return (
     <HStack
+      marginTop={4}
       space={4}
       alignItems="center"
       padding={4}
@@ -209,4 +209,4 @@ const AccountHelpCard = () => {
   );
 };
 
-export default MoreScreen;
+export default More;

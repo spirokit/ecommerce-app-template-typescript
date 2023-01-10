@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   HStack,
@@ -12,6 +13,7 @@ import { ScrollView } from "react-native";
 import BackButton from "../components/BackButton";
 
 const AddDeliveryAddress = () => {
+  const navigation = useNavigation();
   const { colors } = useTheme();
   return (
     <ScrollView
@@ -25,7 +27,7 @@ const AddDeliveryAddress = () => {
         flexGrow: 1,
       }}
     >
-      <VStack padding={4} flex={1} safeAreaBottom space={6}>
+      <VStack padding={4} flex={1} space={6}>
         <HStack
           padding={4}
           width="full"
@@ -48,7 +50,7 @@ const AddDeliveryAddress = () => {
           <Input placeholder="House No / Flat No / Floor (Opt)"></Input>
           <Input placeholder="Gate code (Opt)"></Input>
         </VStack>
-        <Button>Confirm</Button>
+        <Button onPress={() => navigation.goBack()}>Confirm</Button>
       </VStack>
     </ScrollView>
   );

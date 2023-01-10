@@ -2,9 +2,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Filter } from "../screens/SearchFiltersScreen";
 
 export type GlobalParamList = {
-  Detail: {};
-  Onboarding: {};
-  Home: {};
+  Detail: undefined;
+  Onboarding: undefined;
+  Home: undefined;
   Section: {
     title?: string;
   };
@@ -14,14 +14,21 @@ export type GlobalParamList = {
   SearchFilters: {
     activeFilters?: Filter[];
   };
-  SignIn: {};
-  SignUp: {};
-  VerifyAccount: {};
-  More: {};
-  Favorites: {};
-  Checkout: {};
-  AddPaymentMethod: {};
-  AddDeliveryAddress: {};
+  SignIn: undefined;
+  SignUp: undefined;
+  VerifyAccount: undefined;
+  More: undefined;
+  Favorites: undefined;
+  Checkout: undefined;
+  AddPaymentMethod: undefined;
+  AddDeliveryAddress: undefined;
+  TabBarNavigation: undefined;
 };
 
 export type ScreenNavigationProp = StackNavigationProp<GlobalParamList>;
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends GlobalParamList {}
+  }
+}

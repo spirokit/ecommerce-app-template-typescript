@@ -26,6 +26,7 @@ import {
 import { Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { PurchaseResume } from "./PurchaseResume";
+import { useNavigation } from "@react-navigation/native";
 
 const screenHeight = Dimensions.get("screen").height;
 const PaymentSheet = (props: {
@@ -33,6 +34,7 @@ const PaymentSheet = (props: {
   onClose: () => void;
   onConfirm: () => void;
 }) => {
+  const navigation = useNavigation();
   const [selectedCard, setSelectedCard] = useState<CreditCard>();
 
   const styles = {
@@ -64,9 +66,21 @@ const PaymentSheet = (props: {
                 selectedCard={selectedCard}
                 onCreditCardSelected={(data) => setSelectedCard(data)}
               ></CreditCardSelector>
-              <Subhead>Add a card</Subhead>
+              <Pressable
+                onPress={() => {
+                  props.onClose();
+                  navigation.navigate("AddPaymentMethod");
+                }}
+              >
+                <Subhead>Add a card</Subhead>
+              </Pressable>
             </VStack>
-            <DeliveryAddress></DeliveryAddress>
+            <DeliveryAddress
+              onAddDeliveryAddress={() => {
+                props.onClose();
+                navigation.navigate("AddDeliveryAddress");
+              }}
+            ></DeliveryAddress>
             <Box
               width="full"
               height={0.5}
@@ -89,7 +103,7 @@ const PaymentSheet = (props: {
   );
 };
 
-const DeliveryAddress = () => {
+const DeliveryAddress = (props: { onAddDeliveryAddress: () => void }) => {
   const { colors } = useTheme();
   const styles = {
     streetLabelColor: useColorModeValue("primaryGray.900", "primaryGray.100"),
@@ -113,7 +127,7 @@ const DeliveryAddress = () => {
           width="auto"
           variant="tertiary"
           size="sm"
-          onPress={() => console.log("Add delivery address tapped")}
+          onPress={() => props.onAddDeliveryAddress()}
           IconLeftComponent={PlusIcon}
         ></Button>
       </HStack>

@@ -1,14 +1,20 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import DetailScreen from "../screens/DetailScreen";
-import FoodSearchScreen from "../screens/FoodSearchScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
-import FoodFiltersScreen from "../screens/FoodFiltersScreen";
 import { GlobalParamList } from "./GlobalParamList";
-import OnboardingScreen from "../screens/OnboardingScreen";
+import Favorites from "../screens/FavoritesScreen";
+import SearchFilters from "../screens/SearchFiltersScreen";
+import SectionScreen from "../screens/SectionScreen";
+import More from "../screens/MoreScreen";
+import Checkout from "../screens/CheckoutScreen";
+import AddPaymentMethod from "../screens/AddPaymentMethodScreen";
+import AddDeliveryAddress from "../screens/AddDeliveryAddressScreen";
 
 const ExploreStack = createStackNavigator<GlobalParamList>();
-const BrowseStack = createStackNavigator<GlobalParamList>();
+const SearchStack = createStackNavigator<GlobalParamList>();
+const FavoritesStack = createStackNavigator<GlobalParamList>();
+const MoreStack = createStackNavigator<GlobalParamList>();
 
 const ExploreStackScreen = () => {
   return (
@@ -23,35 +29,129 @@ const ExploreStackScreen = () => {
         component={DetailScreen}
         options={{ headerShown: false }}
       />
+      <ExploreStack.Screen
+        name="Section"
+        component={SectionScreen}
+        options={{ headerShown: false }}
+      />
+      <ExploreStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ headerShown: false }}
+      />
+      <ExploreStack.Screen
+        name="AddPaymentMethod"
+        component={AddPaymentMethod}
+        options={{ headerShown: false }}
+      />
+      <ExploreStack.Screen
+        name="AddDeliveryAddress"
+        component={AddDeliveryAddress}
+        options={{ headerShown: false }}
+      />
     </ExploreStack.Navigator>
   );
 };
 
-const BrowseStackScreen = () => {
+const SearchStackScreen = () => {
   return (
-    <BrowseStack.Navigator initialRouteName={"Search"}>
-      <BrowseStack.Screen
+    <SearchStack.Navigator initialRouteName={"Search"}>
+      <SearchStack.Screen
         name="Search"
         component={SearchScreen}
         options={{ headerShown: false }}
       />
-      <BrowseStack.Screen
-        name="FoodSearch"
-        component={FoodSearchScreen}
-        options={{ headerShown: false }}
-      />
-      <BrowseStack.Screen
-        name="FoodFilters"
-        component={FoodFiltersScreen}
-        options={{ headerShown: false }}
-      />
-      <BrowseStack.Screen
+      <SearchStack.Screen
         name="Detail"
         component={DetailScreen}
         options={{ headerShown: false }}
       />
-    </BrowseStack.Navigator>
+      <SearchStack.Screen
+        name="SearchFilters"
+        component={SearchFilters}
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="AddPaymentMethod"
+        component={AddPaymentMethod}
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="AddDeliveryAddress"
+        component={AddDeliveryAddress}
+        options={{ headerShown: false }}
+      />
+    </SearchStack.Navigator>
   );
 };
 
-export { ExploreStackScreen, BrowseStackScreen };
+const FavoritesStackScreen = () => {
+  return (
+    <FavoritesStack.Navigator initialRouteName="Favorites">
+      <FavoritesStack.Screen
+        name="Favorites"
+        component={Favorites}
+        options={{ headerShown: false }}
+      />
+      <FavoritesStack.Screen
+        name="Detail"
+        component={DetailScreen}
+        options={{ headerShown: false }}
+      />
+      <FavoritesStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ headerShown: false }}
+      />
+      <FavoritesStack.Screen
+        name="AddPaymentMethod"
+        component={AddPaymentMethod}
+        options={{ headerShown: false }}
+      />
+      <FavoritesStack.Screen
+        name="AddDeliveryAddress"
+        component={AddDeliveryAddress}
+        options={{ headerShown: false }}
+      />
+    </FavoritesStack.Navigator>
+  );
+};
+
+const MoreStackScreen = () => {
+  return (
+    <MoreStack.Navigator initialRouteName="More">
+      <MoreStack.Screen
+        name="More"
+        component={More}
+        options={{ headerShown: false }}
+      />
+      <MoreStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ headerShown: false }}
+      />
+      <MoreStack.Screen
+        name="AddPaymentMethod"
+        component={AddPaymentMethod}
+        options={{ headerShown: false }}
+      />
+      <MoreStack.Screen
+        name="AddDeliveryAddress"
+        component={AddDeliveryAddress}
+        options={{ headerShown: false }}
+      />
+    </MoreStack.Navigator>
+  );
+};
+
+export {
+  ExploreStackScreen,
+  SearchStackScreen,
+  FavoritesStackScreen,
+  MoreStackScreen,
+};

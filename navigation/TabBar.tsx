@@ -4,6 +4,7 @@ import { TabBar, Caption } from "@spirokit/core";
 import { SvgProps } from "react-native-svg";
 import {
   DotsHorizontalIcon,
+  HeartIcon,
   HomeIcon,
   SearchIcon,
 } from "react-native-heroicons/outline";
@@ -32,8 +33,14 @@ const TabBarComponent: React.FC<BottomTabBarProps> = (props) => {
       case "ExploreTab":
         return HomeIcon;
 
-      case "BrowseTab":
+      case "SearchTab":
         return SearchIcon;
+
+      case "FavoritesTab":
+        return HeartIcon;
+
+      case "MoreTab":
+        return DotsHorizontalIcon;
 
       default:
         return DotsHorizontalIcon;

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   ZStack,
   Image,
@@ -14,6 +15,7 @@ import Logo from "../assets/logo-white.png";
 
 const imageSize = Dimensions.get("screen").width * 0.65;
 const Onboarding = () => {
+  const navigation = useNavigation();
   return (
     <ZStack flex={1}>
       <Image
@@ -32,6 +34,7 @@ const Onboarding = () => {
       >
         <Box alignItems="center" width="full" justifyContent="center" flex={1}>
           <Image
+            alt="Logo"
             marginBottom={6}
             width={imageSize}
             height={imageSize / 2}
@@ -48,10 +51,12 @@ const Onboarding = () => {
           </TitleOne>
         </Box>
         <VStack width="full" alignItems="center" space={4} padding={4}>
-          <Button>Join us!</Button>
+          <Button onPress={() => navigation.navigate("SignUp")}>
+            Join us!
+          </Button>
           <HStack alignItems="center">
             <Body>If you have an account, </Body>
-            <Pressable onPress={() => console.log("navigate to login")}>
+            <Pressable onPress={() => navigation.navigate("SignIn")}>
               <Body fontWeight="bold" textDecorationLine="underline">
                 Sign in
               </Body>

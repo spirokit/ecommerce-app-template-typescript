@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   FlatList,
@@ -8,11 +9,11 @@ import {
   Image,
   Box,
   Body,
+  Pressable,
 } from "@spirokit/core";
 import React, { useState } from "react";
 import { Dimensions } from "react-native";
 import { ShoppingBagIcon, TrashIcon } from "react-native-heroicons/outline";
-import BackButton from "../components/BackButton";
 
 type Favorite = {
   assetUrl: string;
@@ -36,14 +37,8 @@ const Favorites = () => {
   };
 
   return (
-    <VStack
-      safeAreaBottom
-      space={4}
-      flex={1}
-      backgroundColor={styles.background}
-    >
+    <VStack space={4} flex={1} backgroundColor={styles.background}>
       <HStack space={4} alignItems="center" paddingX={4} paddingTop={4}>
-        <BackButton></BackButton>
         <TitleThree flex={1} fontWeight="semibold">
           Favorites
         </TitleThree>
@@ -58,6 +53,7 @@ const Favorites = () => {
       </HStack>
       <FlatList
         paddingX={4}
+        ListFooterComponent={() => <Box safeAreaBottom></Box>}
         data={favorites}
         contentContainerStyle={{ flexGrow: 1, width: "100%" }}
         ItemSeparatorComponent={() => <Box height={4}></Box>}
@@ -71,51 +67,59 @@ const Favorites = () => {
 };
 
 const FavoriteItem = (props: Favorite & { index: number }) => {
+  const navigation = useNavigation();
   const styles = {
     iconColor: useColorModeValue("primary.500", "primary.300"),
     background: useColorModeValue("white", "primaryDark.1"),
   };
   return (
-    <HStack
-      key={`${props.assetUrl}-${props.index}`}
-      overflow="hidden"
-      backgroundColor={styles.background}
-      borderRadius={8}
-      width="full"
-    >
-      <Image
-        alt={props.title}
-        width={screenWidth / 3}
-        height={screenHeight / 7}
-        source={{ uri: props.assetUrl }}
-      ></Image>
-      <VStack justifyContent="space-between" flex={1} paddingX={3} paddingY={2}>
-        <HStack justifyContent="space-between">
-          <Body fontWeight="medium" flex={1}>
-            {props.title}
-          </Body>
-          <Button
-            width="auto"
-            size="sm"
-            textColor={styles.iconColor}
-            variant="tertiary"
-            IconLeftComponent={TrashIcon}
-          ></Button>
-        </HStack>
-        <HStack alignItems="flex-end" justifyContent="space-between">
-          <Body fontWeight="medium" flex={1}>
-            ${props.price.toFixed(2)}
-          </Body>
-          <Button
-            width="auto"
-            size="sm"
-            textColor={styles.iconColor}
-            variant="tertiary"
-            IconLeftComponent={ShoppingBagIcon}
-          ></Button>
-        </HStack>
-      </VStack>
-    </HStack>
+    <Pressable onPress={() => navigation.navigate("Detail")}>
+      <HStack
+        key={`${props.assetUrl}-${props.index}`}
+        overflow="hidden"
+        backgroundColor={styles.background}
+        borderRadius={8}
+        width="full"
+      >
+        <Image
+          alt={props.title}
+          width={screenWidth / 3}
+          height={screenHeight / 7}
+          source={{ uri: props.assetUrl }}
+        ></Image>
+        <VStack
+          justifyContent="space-between"
+          flex={1}
+          paddingX={3}
+          paddingY={2}
+        >
+          <HStack justifyContent="space-between">
+            <Body fontWeight="medium" flex={1}>
+              {props.title}
+            </Body>
+            <Button
+              width="auto"
+              size="sm"
+              textColor={styles.iconColor}
+              variant="tertiary"
+              IconLeftComponent={TrashIcon}
+            ></Button>
+          </HStack>
+          <HStack alignItems="flex-end" justifyContent="space-between">
+            <Body fontWeight="medium" flex={1}>
+              ${props.price.toFixed(2)}
+            </Body>
+            <Button
+              width="auto"
+              size="sm"
+              textColor={styles.iconColor}
+              variant="tertiary"
+              IconLeftComponent={ShoppingBagIcon}
+            ></Button>
+          </HStack>
+        </VStack>
+      </HStack>
+    </Pressable>
   );
 };
 

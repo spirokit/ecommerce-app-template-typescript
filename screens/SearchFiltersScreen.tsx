@@ -151,7 +151,7 @@ const SearchFilters = (props: SearchFilterProps) => {
           ></Categories>
         </VStack>
       </ScrollView>
-      <Box safeAreaBottom padding={4} width="full" justifyContent="flex-end">
+      <Box padding={4} width="full" justifyContent="flex-end">
         <Button
           onPress={() =>
             navigation.navigate("Search", {

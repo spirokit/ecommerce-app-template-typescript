@@ -57,7 +57,6 @@ const DetailScreen = () => {
             height={screenHeight / 2}
           ></Image>
           <HStack
-            safeAreaTop
             padding={4}
             width="full"
             justifyContent="space-between"
@@ -140,6 +139,7 @@ const SizeSelector = (props: {
       <HStack space={2}>
         {["S", "M", "L", "XL", "XXL"].map((size) => (
           <Pressable
+            key={size}
             borderWidth={1}
             backgroundColor={
               props.selectedSize === size
@@ -156,7 +156,11 @@ const SizeSelector = (props: {
             paddingY={2}
             borderRadius={8}
           >
-            <Subhead color={styles.textColor}>{size}</Subhead>
+            <Subhead
+              color={props.selectedSize === size ? "black" : styles.textColor}
+            >
+              {size}
+            </Subhead>
           </Pressable>
         ))}
       </HStack>

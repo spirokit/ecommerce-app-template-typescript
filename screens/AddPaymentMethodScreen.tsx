@@ -14,8 +14,10 @@ import CreditCard, { CreditCardProps } from "../components/CreditCard";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 import BackButton from "../components/BackButton";
+import { useNavigation } from "@react-navigation/native";
 
 const AddPaymentMethod = () => {
+  const navigation = useNavigation();
   const [cardInfo, setCardInfo] = useState<Partial<CreditCardProps>>({});
   const height = useHeaderHeight();
 
@@ -42,7 +44,6 @@ const AddPaymentMethod = () => {
           space={6}
           padding={4}
           flex={1}
-          safeAreaBottom
           backgroundColor={useColorModeValue(
             "primaryGray.100",
             "primaryDark.0"
@@ -88,7 +89,7 @@ const AddPaymentMethod = () => {
                 onChangeText={(value) => updateCardInfo("cvv", value)}
               ></Input>
             </HStack>
-            <Button>Confirm</Button>
+            <Button onPress={() => navigation.goBack()}>Confirm</Button>
           </VStack>
         </VStack>
       </ScrollView>
