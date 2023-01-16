@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce-app-template",
+  "name": "@spirokit/ecommerce-app-template-typescript",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "keywords": [
@@ -8,7 +8,8 @@
     "template",
     "typescript",
     "boilerplate",
-    "spirokit"
+    "spirokit",
+    "ecommerce"
   ],
   "license": "MIT",
   "scripts": {
@@ -43,9 +44,9 @@
     "typescript": "~4.3.5"
   },
   "bugs": {
-    "url": "https://github.com/spirokit/travel-app-template-typescript/issues"
+    "url": "https://github.com/spirokit/ecommerce-app-template-typescript/issues"
   },
-  "homepage": "https://github.com/spirokit/travel-app-template-typescript#readme",
+  "homepage": "https://github.com/spirokit/ecommerce-app-template-typescript#readme",
   "author": "Mauro Garcia",
   "private": true
 }
