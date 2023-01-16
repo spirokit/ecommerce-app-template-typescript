@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   HStack,
@@ -13,9 +14,10 @@ import {
   useDisclose,
   Alert,
   TitleOne,
+  KeyboardAvoidingView,
 } from "@spirokit/core";
 import React, { useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -24,6 +26,7 @@ import {
 import BackButton from "../components/BackButton";
 import PaymentSheet from "../components/PaymentSheet";
 import { PurchaseResume } from "../components/PurchaseResume";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 type ShoppingBagItem = {
   id: number;
@@ -39,6 +42,8 @@ const screenWidth = Dimensions.get("screen").width;
 
 const Checkout = () => {
   const { isOpen, onClose, onToggle } = useDisclose();
+  const navigation = useNavigation();
+  const height = useHeaderHeight();
 
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -70,8 +75,13 @@ const Checkout = () => {
     setShoppingBag([]);
   };
   return (
-    <>
-      <Box safeAreaBottom flex={1} background={styles.background}>
+    <KeyboardAvoidingView
+      flex={1}
+      keyboardVerticalOffset={height}
+      backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Box flex={1} background={styles.background}>
         <FlatList
           flex={1}
           paddingX={4}
@@ -121,12 +131,19 @@ const Checkout = () => {
           </Body>
         }
         ConfirmButtonComponent={
-          <Button onPress={() => setShowConfirmationModal(false)}>Ok</Button>
+          <Button
+            onPress={() => {
+              setShowConfirmationModal(false);
+              navigation.navigate("ExploreTab", { screen: "Home" });
+            }}
+          >
+            Ok
+          </Button>
         }
         isVisible={showConfirmationModal}
         TitleComponent={<TitleOne>Payment received</TitleOne>}
       ></Alert>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -194,7 +211,7 @@ const ShoppingBagItem = (
               ${(props.price * props.amount).toFixed(2)}
               {props.amount > 1 ? (
                 <Subhead color={styles.priceDisclaimerTextColor}>
-                  ({props.price.toFixed(2)} x {props.amount})
+                  {` (${props.price.toFixed(2)} x ${props.amount})`}
                 </Subhead>
               ) : null}
             </Subhead>

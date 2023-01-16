@@ -38,7 +38,7 @@ const PaymentSheet = (props: {
   const [selectedCard, setSelectedCard] = useState<CreditCard>();
 
   const styles = {
-    bg: useColorModeValue("primaryGray.200", "primaryDark.8"),
+    bg: useColorModeValue("primaryGray.100", "primaryDark.8"),
     separatorColor: useColorModeValue("primaryGray.300", "primaryGray.600"),
   };
   return (

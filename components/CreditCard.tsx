@@ -23,6 +23,7 @@ export type CreditCardProps = {
 const CreditCard = (props: CreditCardProps) => {
   const styles = {
     cardBgColor: useColorModeValue("primaryGray.200", "primaryDark.4"),
+    cardBgFloatingShape: useColorModeValue("primaryGray.300", "primaryDark.2"),
     cardNumberBorderColor: useColorModeValue("primary.500", "primary.300"),
   };
 
@@ -44,7 +45,7 @@ const CreditCard = (props: CreditCardProps) => {
         height={48}
         left={"2/3"}
         borderRadius={8}
-        backgroundColor={"primaryDark.2"}
+        backgroundColor={styles.cardBgFloatingShape}
       ></Box>
       <VStack width="full" space={4} height={48} padding={4}>
         <HStack width="full" justifyContent="flex-end">

@@ -45,19 +45,24 @@ const Onboarding = () => {
             fontSize="4xl"
             textAlign="center"
             width="3/5"
+            color="white"
             numberOfLines={2}
           >
             Trends at your fingertips
           </TitleOne>
         </Box>
         <VStack width="full" alignItems="center" space={4} padding={4}>
-          <Button onPress={() => navigation.navigate("SignUp")}>
+          <Button width="full" onPress={() => navigation.navigate("SignUp")}>
             Join us!
           </Button>
           <HStack alignItems="center">
-            <Body>If you have an account, </Body>
+            <Body color="white">If you have an account, </Body>
             <Pressable onPress={() => navigation.navigate("SignIn")}>
-              <Body fontWeight="bold" textDecorationLine="underline">
+              <Body
+                fontWeight="bold"
+                color="white"
+                textDecorationLine="underline"
+              >
                 Sign in
               </Body>
             </Pressable>

@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import {
   HStack,
-  TitleThree,
   VStack,
   useColorModeValue,
   FlatList,
@@ -15,6 +14,9 @@ import {
   Body,
   Center,
   Pressable,
+  useColorMode,
+  Subhead,
+  TitleThree,
 } from "@spirokit/core";
 import React, { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
@@ -38,37 +40,43 @@ import NoResultsDarkIcon from "../assets/no-results-dark.png";
 const screenWidth = Dimensions.get("window").width;
 const imageWidth = (screenWidth - 32) / 2; // 32 for the left and right margin (16 each)
 
-type ItemProps = { id: number; assetUrl: string; title: string };
+type ItemProps = { id: number; assetUrl: string; title: string; price: number };
 const items: ItemProps[] = [
   {
     id: 1,
     assetUrl: "https://i.imgur.com/CpKlRgU.png",
     title: "Play Hard t-shirt",
+    price: 29,
   },
   {
     id: 2,
     assetUrl: "https://i.imgur.com/qsW2nsI.png",
     title: "Rainbox t-shirt",
+    price: 25,
   },
   {
     id: 3,
     assetUrl: "https://i.imgur.com/rSvwWy3.png",
     title: "PAC-MAN t-shirt",
+    price: 43,
   },
   {
     id: 4,
     assetUrl: "https://i.imgur.com/mM9tFLP.png",
     title: "Solar t-shirt",
+    price: 45,
   },
   {
     id: 5,
     assetUrl: "https://i.imgur.com/K2D1aIE.png",
     title: "Derby t-shirt",
+    price: 30,
   },
   {
     id: 6,
     assetUrl: "https://i.imgur.com/odSZ3Gv.png",
     title: "Regrets t-shirt",
+    price: 40,
   },
 ];
 
@@ -76,6 +84,8 @@ type SearchProps = StackScreenProps<GlobalParamList, "Search">;
 
 const SearchScreen = (props: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState<string>();
+
+  const { colorMode } = useColorMode();
 
   const styles = {
     filtersIconColor: useColorModeValue("primary.500", "primary.300"),
@@ -128,7 +138,7 @@ const SearchScreen = (props: SearchProps) => {
           <Button
             width="auto"
             textColor={styles.filtersIconColor}
-            variant="secondary"
+            variant="tertiary"
             size="sm"
             IconLeftComponent={
               activeFilters.length ? FilterIconSolid : FilterIcon
@@ -154,12 +164,13 @@ const SearchScreen = (props: SearchProps) => {
               ))}
             </HStack>
             <Button
-              size="sm"
+              size="xs"
               variant="secondary"
               width="auto"
-              IconLeftComponent={TrashIcon}
               onPress={() => onClearActiveFilters()}
-            ></Button>
+            >
+              Clear
+            </Button>
           </HStack>
         ) : null}
       </VStack>
@@ -193,12 +204,14 @@ const SearchScreen = (props: SearchProps) => {
               width={`${imageWidth - 8}px`}
             >
               <VerticalCard
+                height={56}
                 BadgeComponent={
                   <Button
                     size="sm"
                     IconLeftComponent={ShoppingBagIcon}
                     width="auto"
                     textColor="black"
+                    colorMode={colorMode}
                   ></Button>
                 }
                 AssetComponent={
@@ -207,7 +220,14 @@ const SearchScreen = (props: SearchProps) => {
                     source={{ uri: item.assetUrl }}
                   ></Image>
                 }
-                TitleComponent={<TitleThree>{item.title}</TitleThree>}
+                TitleComponent={
+                  <>
+                    <Subhead numberOfLines={1}>{item.title}</Subhead>
+                    <TitleThree fontWeight="light">
+                      ${item.price.toFixed(2)}
+                    </TitleThree>
+                  </>
+                }
               ></VerticalCard>
             </Box>
           </Pressable>

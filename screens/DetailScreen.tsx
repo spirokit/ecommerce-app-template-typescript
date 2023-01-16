@@ -190,6 +190,7 @@ const ColorSelector = (props: {
           colors.emerald[500],
         ].map((color) => (
           <Pressable
+            key={color}
             onPress={() => props.onColorSelected(color)}
             borderWidth={props.selectedColor === color ? 2 : 0}
             backgroundColor={color}

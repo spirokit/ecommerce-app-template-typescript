@@ -49,13 +49,7 @@ const AddPaymentMethod = () => {
             "primaryDark.0"
           )}
         >
-          <HStack
-            padding={4}
-            width="full"
-            space={4}
-            alignItems="center"
-            backgroundColor={useColorModeValue("white", "primaryDark.0")}
-          >
+          <HStack width="full" space={4} alignItems="center">
             <BackButton></BackButton>
             <TitleTwo fontWeight={"bold"}>Add Payment Method</TitleTwo>
           </HStack>
@@ -67,6 +61,8 @@ const AddPaymentMethod = () => {
           <VStack space={4} flex={1}>
             <Input
               placeholder="Card number..."
+              maxLength={16}
+              keyboardType="numeric"
               onChangeText={(value) => updateCardInfo("cardNumber", value)}
             ></Input>
             <Input
@@ -75,14 +71,21 @@ const AddPaymentMethod = () => {
             ></Input>
             <HStack flex={1} space={4}>
               <Input
+                _container={{ flex: 1 }}
                 placeholder="MMYY"
+                maxLength={4}
+                keyboardType="numeric"
                 LabelComponent={
                   <Subhead color={styles.inputLabelColor}>Expires on</Subhead>
                 }
                 onChangeText={(value) => updateCardInfo("expiresOn", value)}
               ></Input>
               <Input
+                _container={{ flex: 1 }}
                 placeholder="XXX"
+                maxLength={3}
+                secureTextEntry={true}
+                keyboardType={"numeric"}
                 LabelComponent={
                   <Subhead color={styles.inputLabelColor}>CVV</Subhead>
                 }

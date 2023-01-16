@@ -23,6 +23,9 @@ export type GlobalParamList = {
   AddPaymentMethod: undefined;
   AddDeliveryAddress: undefined;
   TabBarNavigation: undefined;
+  ExploreTab: {
+    screen: string;
+  };
 };
 
 export type ScreenNavigationProp = StackNavigationProp<GlobalParamList>;

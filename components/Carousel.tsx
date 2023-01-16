@@ -61,7 +61,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
               <Pressable
                 flex={1}
                 onPress={() => {
-                  navigation.navigate("Detail", {});
+                  navigation.navigate("Detail");
                 }}
                 shadow={1}
                 marginRight={4}

@@ -7,22 +7,18 @@ import {
   useColorModeValue,
   TitleThree,
   Body,
-  Badge,
   Pressable,
   VerticalCard,
   Image,
   Subhead,
   Box,
   ZStack,
+  useTheme,
 } from "@spirokit/core";
 import React, { memo, useState } from "react";
 import { ScrollView } from "react-native";
-import { TrashIcon } from "react-native-heroicons/outline";
 import BackButton from "../components/BackButton";
-import {
-  GlobalParamList,
-  ScreenNavigationProp,
-} from "../navigation/GlobalParamList";
+import { GlobalParamList } from "../navigation/GlobalParamList";
 
 export type Filter = { value: string; type: string };
 
@@ -81,7 +77,9 @@ const SearchFilters = (props: SearchFilterProps) => {
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
     props.route.params?.activeFilters ?? []
   );
-  const navigation = useNavigation<ScreenNavigationProp>();
+  const [bottomPadding, setBottomPadding] = useState<number>(0);
+  const { colors } = useTheme();
+  const navigation = useNavigation();
 
   const onFilterSelected = (filter: Filter) => {
     const exists = activeFilters.find(
@@ -111,13 +109,25 @@ const SearchFilters = (props: SearchFilterProps) => {
   };
 
   return (
-    <VStack
-      height="full"
-      backgroundColor={useColorModeValue("primaryGray.100", "primaryDark.0")}
-    >
-      <ScrollView>
-        <VStack space={4} padding={4} width="full">
-          <HStack space={4} alignItems="center" flex={1}>
+    <>
+      <ScrollView
+        style={{
+          backgroundColor: useColorModeValue(
+            colors.primaryGray["100"],
+            colors.primaryDark["1"]
+          ),
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+      >
+        <VStack
+          flex={1}
+          space={4}
+          padding={4}
+          marginBottom={`${bottomPadding}px`}
+        >
+          <HStack space={4} alignItems="center">
             <BackButton></BackButton>
             <TitleThree flex={1} fontWeight="semibold">
               Filters
@@ -125,11 +135,11 @@ const SearchFilters = (props: SearchFilterProps) => {
             <Button
               width="auto"
               variant="tertiary"
-              textColor={styles.clearFiltersIconColor}
-              size="sm"
+              size="xs"
               onPress={() => onClearFilters()}
-              IconLeftComponent={TrashIcon}
-            ></Button>
+            >
+              Clear
+            </Button>
           </HStack>
 
           <FilterCriteria
@@ -146,12 +156,18 @@ const SearchFilters = (props: SearchFilterProps) => {
           ></FilterCriteria>
           <Categories
             activeFilters={activeFilters}
-            data={categoryFilters}
             onFilterSelected={(filter) => onFilterSelected(filter)}
           ></Categories>
         </VStack>
       </ScrollView>
-      <Box padding={4} width="full" justifyContent="flex-end">
+      <Box
+        onLayout={(event) => setBottomPadding(event.nativeEvent.layout.height)}
+        position="absolute"
+        bottom={0}
+        padding={4}
+        width="full"
+        justifyContent="flex-end"
+      >
         <Button
           onPress={() =>
             navigation.navigate("Search", {
@@ -162,7 +178,7 @@ const SearchFilters = (props: SearchFilterProps) => {
           Apply filters
         </Button>
       </Box>
-    </VStack>
+    </>
   );
 };
 
@@ -179,24 +195,21 @@ const FilterCriteria = (props: {
       <Body>{title}</Body>
       <HStack space={2} width="full" flexWrap="wrap">
         {data.map((item, index) => (
-          <Pressable
+          <Button
             key={`${item.type}-${index}`}
             onPress={() => onFilterSelected(item)}
+            size="xs"
+            variant={
+              activeFilters.find(
+                (f) => f.value === item.value && f.type === item.type // This applies conditional styles based on the state of the filter
+              )
+                ? "primary"
+                : "secondary"
+            }
+            marginBottom={2}
           >
-            <Badge
-              colorMode={
-                activeFilters.find(
-                  (f) => f.value === item.value && f.type === item.type // This applies conditional styles based on the state of the filter
-                )
-                  ? "light"
-                  : "dark"
-              }
-              marginBottom={2}
-              key={`${item.value} ${item.type}`}
-            >
-              {item.value}
-            </Badge>
-          </Pressable>
+            {item.value}
+          </Button>
         ))}
       </HStack>
     </VStack>
@@ -207,38 +220,41 @@ type CategoryFilter = Filter & { assetUrl: string };
 const Categories = memo(
   (props: {
     activeFilters: Filter[];
-    data: CategoryFilter[];
     onFilterSelected: (filter: Filter) => void;
   }) => {
-    const { data, activeFilters, onFilterSelected } = props;
+    const { activeFilters, onFilterSelected } = props;
 
     return (
-      <VStack space={2}>
+      <VStack space={2} flex={1}>
         <Body>Category</Body>
-        <VStack space={2}>
-          {data.map((c, index) => (
+        <VStack space={4}>
+          {categoryFilters.map((item) => (
             <Pressable
-              key={`${c.type}-${index}`}
+              key={item.assetUrl}
               onPress={() => {
                 onFilterSelected({
-                  type: c.type,
-                  value: c.value,
+                  type: item.type,
+                  value: item.value,
                 });
               }}
             >
-              <ZStack flex={1}>
+              <ZStack height={32}>
                 <VerticalCard
-                  TitleComponent={<Subhead>{c.value}</Subhead>}
+                  height={32}
+                  TitleComponent={<Subhead>{item.value}</Subhead>}
                   AssetComponent={
-                    <Image alt={c.value} source={{ uri: c.assetUrl }}></Image>
+                    <Image
+                      alt={item.value}
+                      source={{ uri: item.assetUrl }}
+                    ></Image>
                   }
                 ></VerticalCard>
                 <Box
-                  height="full"
+                  height={"full"}
                   width="full"
                   backgroundColor={
                     activeFilters.find(
-                      (af) => af.type === c.type && af.value === c.value
+                      (af) => af.type === item.type && af.value === item.value
                     ) !== undefined
                       ? "primary.500:alpha.20"
                       : "transparent"

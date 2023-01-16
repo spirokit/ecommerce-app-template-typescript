@@ -9,6 +9,8 @@ import {
   Box,
   Button,
   Pressable,
+  Subhead,
+  useColorMode,
 } from "@spirokit/core";
 import React from "react";
 import { Dimensions, View } from "react-native";
@@ -22,42 +24,50 @@ import { useNavigation } from "@react-navigation/native";
 type SectionProps = StackScreenProps<GlobalParamList, "Section">;
 
 const imageWidth = (Dimensions.get("window").width - 32) / 2; // 32 for the left and right margin (16 each)
-const items: { id: number; assetUrl: string; title: string }[] = [
-  {
-    id: 1,
-    assetUrl: "https://i.imgur.com/CpKlRgU.png",
-    title: "Play Hard t-shirt",
-  },
-  {
-    id: 2,
-    assetUrl: "https://i.imgur.com/qsW2nsI.png",
-    title: "Rainbox t-shirt",
-  },
-  {
-    id: 3,
-    assetUrl: "https://i.imgur.com/rSvwWy3.png",
-    title: "PAC-MAN t-shirt",
-  },
-  {
-    id: 4,
-    assetUrl: "https://i.imgur.com/mM9tFLP.png",
-    title: "Solar t-shirt",
-  },
-  {
-    id: 5,
-    assetUrl: "https://i.imgur.com/K2D1aIE.png",
-    title: "Derby t-shirt",
-  },
-  {
-    id: 6,
-    assetUrl: "https://i.imgur.com/odSZ3Gv.png",
-    title: "Regrets t-shirt",
-  },
-];
+const items: { id: number; assetUrl: string; title: string; price: number }[] =
+  [
+    {
+      id: 1,
+      assetUrl: "https://i.imgur.com/CpKlRgU.png",
+      title: "Play Hard t-shirt",
+      price: 29,
+    },
+    {
+      id: 2,
+      assetUrl: "https://i.imgur.com/qsW2nsI.png",
+      title: "Rainbox t-shirt",
+      price: 25,
+    },
+    {
+      id: 3,
+      assetUrl: "https://i.imgur.com/rSvwWy3.png",
+      title: "PAC-MAN t-shirt",
+      price: 43,
+    },
+    {
+      id: 4,
+      assetUrl: "https://i.imgur.com/mM9tFLP.png",
+      title: "Solar t-shirt",
+      price: 45,
+    },
+    {
+      id: 5,
+      assetUrl: "https://i.imgur.com/K2D1aIE.png",
+      title: "Derby t-shirt",
+      price: 30,
+    },
+    {
+      id: 6,
+      assetUrl: "https://i.imgur.com/odSZ3Gv.png",
+      title: "Regrets t-shirt",
+      price: 40,
+    },
+  ];
 
 const SectionScreen = (props: SectionProps) => {
   const { route } = props;
   const navigation = useNavigation();
+  const { colorMode } = useColorMode();
 
   const title = route.params?.title || "Best Sellers";
 
@@ -87,12 +97,14 @@ const SectionScreen = (props: SectionProps) => {
               width={`${imageWidth - 8}px`}
             >
               <VerticalCard
+                height={56}
                 BadgeComponent={
                   <Button
                     size="sm"
                     IconLeftComponent={ShoppingBagIcon}
                     width="auto"
                     textColor="black"
+                    colorMode={colorMode}
                   ></Button>
                 }
                 AssetComponent={
@@ -101,7 +113,14 @@ const SectionScreen = (props: SectionProps) => {
                     source={{ uri: item.assetUrl }}
                   ></Image>
                 }
-                TitleComponent={<TitleThree>{item.title}</TitleThree>}
+                TitleComponent={
+                  <>
+                    <Subhead>{item.title}</Subhead>
+                    <TitleThree fontWeight="light">
+                      ${item.price.toFixed(2)}
+                    </TitleThree>
+                  </>
+                }
               ></VerticalCard>
             </Box>
           </Pressable>

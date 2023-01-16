@@ -28,7 +28,7 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState<Favorite[]>(initialItems);
 
   const styles = {
-    iconColor: useColorModeValue("primary.500", "primary.300"),
+    iconColor: useColorModeValue("black", "primary.300"),
     background: useColorModeValue("primaryGray.100", "primaryDark.0"),
   };
 
@@ -48,8 +48,9 @@ const Favorites = () => {
           textColor={styles.iconColor}
           size="sm"
           onPress={() => onClearFavorites()}
-          IconLeftComponent={TrashIcon}
-        ></Button>
+        >
+          Clear
+        </Button>
       </HStack>
       <FlatList
         paddingX={4}
