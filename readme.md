@@ -2,7 +2,7 @@
 
 A SpiroKit E-Commerce app template with Typescript
 
-![ecommerce app banner image](https://i.imgur.com/0jCWLrc.png)
+![ecommerce app banner image](https://i.imgur.com/qEsULxj.jpg)
 
 ## Usage
 
